@@ -11,11 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
-dev-dist
+
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+dev-dist
 *.tsbuildinfo
-.env
-.env.*
