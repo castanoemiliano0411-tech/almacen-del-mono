@@ -12,6 +12,8 @@ export default function Product() {
   const [color, setColor] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
+  const [active, setActive] = useState(0)
+  const [zoom, setZoom] = useState({ on: false, x: 50, y: 50 })
 
   useEffect(() => {
     if (!product) return
@@ -19,10 +21,11 @@ export default function Product() {
     setColor(product.colors[0])
     setQuantity(1)
     setAdded(false)
+    setActive(0)
   }, [product])
 
   const related = useMemo(
-    () => products.filter((item) => item.category === product?.category && item.id !== product?.id).slice(0, 4),
+    () => products.filter((item) => item.category === product?.category && item.id !== product?.id).slice(0, 3),
     [product],
   )
 
@@ -35,22 +38,79 @@ export default function Product() {
     )
   }
 
+  const images = product.images
+  const current = images[active] || images[0]
+
   const onAdd = () => {
     addItem(product, { size, color, quantity })
     setAdded(true)
     window.setTimeout(() => setAdded(false), 1800)
   }
 
+  const pickColor = (option, index) => {
+    setColor(option)
+    if (images[index]) setActive(index)
+  }
+
+  const moveZoom = (event) => {
+    const box = event.currentTarget.getBoundingClientRect()
+    setZoom({
+      on: true,
+      x: ((event.clientX - box.left) / box.width) * 100,
+      y: ((event.clientY - box.top) / box.height) * 100,
+    })
+  }
+
+  const step = (dir) => {
+    setActive((currentIndex) => (currentIndex + dir + images.length) % images.length)
+  }
+
   return (
     <div className="container">
       <div className="pdp">
         <div className="pdp-gallery">
-          {product.images.map((src) => (
-            <img key={src} src={src} alt={product.name} />
-          ))}
+          <div
+            className={`pdp-stage ${zoom.on ? 'is-zoom' : ''}`}
+            onMouseMove={moveZoom}
+            onMouseLeave={() => setZoom({ on: false, x: 50, y: 50 })}
+          >
+            <img
+              src={current}
+              alt={product.name}
+              style={{ transformOrigin: `${zoom.x}% ${zoom.y}%` }}
+            />
+            {images.length > 1 && (
+              <>
+                <button type="button" className="pdp-nav prev" onClick={() => step(-1)} aria-label="Foto anterior">
+                  ‹
+                </button>
+                <button type="button" className="pdp-nav next" onClick={() => step(1)} aria-label="Foto siguiente">
+                  ›
+                </button>
+              </>
+            )}
+            <span className="pdp-hint">{zoom.on ? 'Mueve el mouse para acercar' : 'Pasa el mouse para zoom'}</span>
+          </div>
+          {images.length > 1 && (
+            <div className="pdp-thumbs">
+              {images.map((src, index) => (
+                <button
+                  key={src}
+                  type="button"
+                  className={index === active ? 'active' : ''}
+                  onClick={() => setActive(index)}
+                  onMouseEnter={() => setActive(index)}
+                >
+                  <img src={src} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div className="pdp-info">
-          <p className="eyebrow">{categoryLabels[product.category] || product.category}</p>
+          <p className="eyebrow">
+            {product.brand} · {categoryLabels[product.category] || product.category}
+          </p>
           <h1 className="display">{product.name}</h1>
           <div className="price">
             <strong>{formatPrice(product.price)}</strong>
@@ -61,15 +121,22 @@ export default function Product() {
               </span>
             )}
           </div>
-          <p style={{ color: 'var(--muted)', margin: '16px 0 24px' }}>{product.description}</p>
+          <p style={{ color: 'var(--muted)', margin: '16px 0 8px' }}>{product.description}</p>
+          {product.stock != null && (
+            <p className={`product-meta ${product.stock <= 4 ? 'stock-low' : ''}`} style={{ marginBottom: 20 }}>
+              {product.stock <= 4
+                ? `Quedan ${product.stock} — cuando se agota, no vuelve`
+                : `${product.stock} en este drop`}
+            </p>
+          )}
           <p className="eyebrow">Color</p>
           <div className="swatches">
-            {product.colors.map((option) => (
+            {product.colors.map((option, index) => (
               <button
                 key={option}
                 type="button"
                 className={`color-btn ${color === option ? 'active' : ''}`}
-                onClick={() => setColor(option)}
+                onClick={() => pickColor(option, index)}
               >
                 {option}
               </button>
@@ -98,8 +165,8 @@ export default function Product() {
               +
             </button>
           </div>
-          <button className="btn btn-accent" type="button" onClick={onAdd}>
-            Añadir a la bolsa
+          <button className="btn btn-lime" type="button" onClick={onAdd}>
+            Añadir {color} / {size}
           </button>
           <ul className="details-list">
             {product.details.map((detail) => (
@@ -115,7 +182,7 @@ export default function Product() {
       {related.length > 0 && (
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="section-head">
-            <h2 className="display">También te puede gustar</h2>
+            <h2 className="display">Más del drop</h2>
           </div>
           <div className="product-grid">
             {related.map((item) => (

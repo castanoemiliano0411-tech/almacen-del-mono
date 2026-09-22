@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { stores, WHATSAPP, whatsappLink } from '../data/stores'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
@@ -6,7 +7,7 @@ export default function Contact() {
   return (
     <div className="container">
       <div className="page-hero">
-        <p className="eyebrow">Hablemos</p>
+        <p className="eyebrow">Drop 007</p>
         <h1 className="display">Contacto</h1>
       </div>
       <div className="contact-layout">
@@ -28,18 +29,33 @@ export default function Contact() {
           </label>
           <label>
             Mensaje
-            <textarea name="message" rows="5" required />
+            <textarea name="message" rows="5" required placeholder="Talla, drop o si quieres aviso del 008" />
           </label>
-          <button className="btn btn-accent" type="submit">
+          <button className="btn btn-lime" type="submit">
             Enviar
           </button>
-          {sent && <p>Recibido. Te respondemos en menos de un día hábil.</p>}
+          {sent && <p>Listo. Te escribimos antes del siguiente drop.</p>}
         </form>
         <aside className="summary">
-          <h2 className="display">Visítanos</h2>
-          <p>Cra. 7 # 45-12, Bogotá</p>
-          <p>Lun–Sáb · 11:00 a 19:00</p>
+          <h2 className="display">Locales</h2>
+          {stores.map((store) => (
+            <div key={store.id} style={{ marginBottom: 18 }}>
+              <p>
+                <strong>
+                  {store.city} · {store.name}
+                </strong>
+              </p>
+              <p>{store.address}</p>
+              <p>{store.hours}</p>
+              <a href={store.map} target="_blank" rel="noreferrer">
+                Cómo llegar
+              </a>
+            </div>
+          ))}
           <p>hola@almacendelmono.com</p>
+          <a className="btn btn-lime" href={whatsappLink('Hola, Almacén del Mono')} style={{ marginTop: 16 }}>
+            WhatsApp {WHATSAPP.display}
+          </a>
         </aside>
       </div>
     </div>

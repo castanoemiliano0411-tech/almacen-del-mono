@@ -1,124 +1,118 @@
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
-import { categories, products } from '../data/products'
+import DropCountdown from '../components/DropCountdown'
+import { products, getBrands } from '../data/products'
+import BrandTile from '../components/BrandTile'
+import StoresStrip from '../components/StoresStrip'
 
 export default function Home() {
-  const featured = products.filter((item) => item.featured)
+  const dropPieces = products.filter((item) => item.drop).slice(0, 6)
 
   return (
     <>
-      <section className="hero">
-        <div className="hero-copy">
-          <p className="eyebrow">Colección otoño</p>
-          <h1 className="display">Viste con carácter, no con ruido.</h1>
-          <p>Prendas, precios y tallas claros. Un almacén de moda contemporánea para el día a día.</p>
-          <div className="hero-actions">
-            <Link className="btn btn-primary" to="/tienda">
-              Comprar ahora
-            </Link>
-            <Link className="btn btn-ghost" to="/tienda?categoria=novedades">
-              Ver novedades
-            </Link>
-          </div>
-          <div className="hero-meta">
-            <div>
-              <strong>8</strong>
-              looks destacados
-            </div>
-            <div>
-              <strong>30 días</strong>
-              para cambios
-            </div>
-            <div>
-              <strong>-21%</strong>
-              en promociones
-            </div>
-          </div>
-        </div>
-        <div className="hero-visual">
-          <img
-            src="https://images.unsplash.com/photo-1469334031216-e382a71b716b?auto=format&fit=crop&w=1400&q=80"
-            alt="Editorial de moda Almacén del Mono"
-          />
-          <div className="hero-chip">
-            <p className="eyebrow">Look de la semana</p>
-            <strong>Lino, sastrería y cuero vegetal</strong>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Explorar</p>
-              <h2 className="display">Compra por categoría</h2>
-            </div>
-          </div>
-          <div className="categories">
-            {categories.map((category) => (
-              <Link key={category.id} to={`/tienda?categoria=${category.id}`} className="category-card">
-                <img src={category.image} alt={category.name} />
-                <span>{category.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Selección</p>
-              <h2 className="display">Piezas destacadas</h2>
-            </div>
-            <Link to="/tienda">Ver todo</Link>
-          </div>
-          <div className="product-grid">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="editorial">
+      <section className="hero-drop">
         <img
-          src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1400&q=80"
-          alt="Interior de tienda"
+          className="hero-drop-img"
+          src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=2000&q=80"
+          alt="Hoodie Hotel Drop 007"
         />
-        <div className="editorial-copy">
-          <p className="eyebrow">El almacén</p>
-          <h2 className="display">Hecho para verse bien y usarse mucho.</h2>
-          <p>
-            Elegimos telas con caída honesta y cortes que no pasan de moda en una temporada. Menos stock, más criterio.
+        <div className="hero-drop-shade" />
+        <p className="hero-hotel">(HOTEL)</p>
+        <div className="hero-drop-copy">
+          <div className="drop-kicker">
+            <span className="drop-badge">Almacén del Mono — Drop 007</span>
+            <span className="drop-season">Colección Invierno 2025</span>
+          </div>
+          <h1 className="hero-title">
+            Viste
+            <br />
+            <em>el</em>
+            <br />
+            vacío.
+          </h1>
+          <p className="hero-lead">
+            Streetwear de edición limitada para los que no siguen tendencias — las crean. Cada pieza, una sola vez.
           </p>
-          <Link className="btn btn-ghost" to="/nosotros" style={{ color: '#f6f1ea', borderColor: '#f6f1ea', width: 'fit-content' }}>
-            Nuestra historia
-          </Link>
+        </div>
+
+        <div className="hero-drop-bottom">
+          <DropCountdown />
+          <div className="hero-drop-actions">
+            <Link className="btn btn-lime" to="/tienda?categoria=drops">
+              Ver drops →
+            </Link>
+            <Link className="btn btn-ghost" to="/tienda">
+              Explorar todo
+            </Link>
+          </div>
+          <div className="scroll-hint">
+            <span>Scroll</span>
+            <i />
+          </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container promo-strip">
-          <article className="promo-item">
-            <p className="eyebrow">Envíos</p>
-            <h3 className="display">Gratis desde $200.000</h3>
-            <p>Entregas en ciudades principales en 2 a 4 días hábiles.</p>
-          </article>
-          <article className="promo-item">
-            <p className="eyebrow">Tallas</p>
-            <h3 className="display">Guía clara</h3>
-            <p>Cada prenda indica tallas reales. Si no calza, la cambias.</p>
-          </article>
-          <article className="promo-item">
-            <p className="eyebrow">Promos</p>
-            <h3 className="display">Hasta -21%</h3>
-            <p>Descuentos visibles en ficha. Sin letras pequeñas de último minuto.</p>
-          </article>
+      <section className="trust-bar">
+        <div>
+          <strong>Envío gratis</strong>
+          <span>En compras +$150.000</span>
+        </div>
+        <div>
+          <strong>Cambio sin costo</strong>
+          <span>Si no te queda, lo cambiamos</span>
+        </div>
+        <div>
+          <strong>Despacho 24-48h</strong>
+          <span>Ciudades principales</span>
+        </div>
+        <div>
+          <strong>Pago seguro</strong>
+          <span>Tarjeta, PSE y contraentrega</span>
         </div>
       </section>
+
+      <section className="brand-strip">
+        <div className="exclusives-head">
+          <div>
+            <p className="drop-label">Marcas</p>
+            <h2>
+              Elige marca.
+              <em> Puma, Nike, Adidas, Reebok, Under Armour.</em>
+            </h2>
+          </div>
+          <Link to="/tienda?vista=marcas">Ver todas</Link>
+        </div>
+        <div className="brand-grid">
+          {getBrands().map((brand, index) => (
+            <BrandTile
+              key={brand}
+              brand={brand}
+              index={index}
+              to={`/tienda?marca=${encodeURIComponent(brand)}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="exclusives">
+        <div className="exclusives-head">
+          <div>
+            <p className="drop-label">Drop 007</p>
+            <h2>
+              Exclusivos.
+              <em> Por tiempo limitado.</em>
+            </h2>
+          </div>
+          <p className="exclusives-aside">Cuando se agota, no vuelve.</p>
+        </div>
+        <div className="product-grid">
+          {dropPieces.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      <StoresStrip />
     </>
   )
 }

@@ -1,14 +1,10 @@
 export function LogoMark({ size = 36 }) {
   return (
     <svg className="logo-mark" width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <rect width="64" height="64" rx="16" fill="#1A1612" />
-      <circle cx="32" cy="28" r="12" fill="#F6F1EA" />
-      <circle cx="27" cy="27" r="2" fill="#1A1612" />
-      <circle cx="37" cy="27" r="2" fill="#1A1612" />
-      <path d="M26 34c2.2 3 9.8 3 12 0" stroke="#1A1612" strokeWidth="2" strokeLinecap="round" />
-      <ellipse cx="18" cy="24" rx="5" ry="7" fill="#F6F1EA" />
-      <ellipse cx="46" cy="24" rx="5" ry="7" fill="#F6F1EA" />
-      <path d="M22 44h20c0 8-4 12-10 12s-10-4-10-12Z" fill="#C45C26" />
+      <rect x="3" y="3" width="58" height="58" fill="#0D0C0B" stroke="#EFE8DC" strokeWidth="3" />
+      <text x="32" y="40" textAnchor="middle" fill="#EFE8DC" fontSize="20" fontFamily="Georgia, serif">
+        AM
+      </text>
     </svg>
   )
 }

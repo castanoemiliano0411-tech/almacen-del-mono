@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { formatPrice } from '../data/products'
+import { formatPrice, FREE_SHIPPING_FROM } from '../data/products'
 
 export default function Checkout() {
   const { items, total, clearCart } = useCart()
   const [done, setDone] = useState(false)
-  const shipping = total >= 200000 ? 0 : 12000
+  const shipping = total >= FREE_SHIPPING_FROM ? 0 : 12000
 
   if (!items.length && !done) {
     return (
@@ -23,7 +23,7 @@ export default function Checkout() {
         <p className="eyebrow">Pedido confirmado</p>
         <h1 className="display">Gracias por tu compra</h1>
         <p style={{ color: 'var(--muted)', margin: '12px 0 24px' }}>
-          Recibirás un correo con el detalle. Este flujo se conectará al backend más adelante.
+          Recibirás un correo con el detalle y, si pediste recoger, te escribimos al WhatsApp cuando esté en el local.
         </p>
         <Link className="btn btn-primary" to="/tienda">
           Seguir viendo
@@ -63,7 +63,7 @@ export default function Checkout() {
             Teléfono
             <input name="phone" required placeholder="300 000 0000" />
           </label>
-          <button className="btn btn-accent" type="submit">
+          <button className="btn btn-lime" type="submit">
             Confirmar pedido
           </button>
         </form>

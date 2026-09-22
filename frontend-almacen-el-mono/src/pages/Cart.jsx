@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { formatPrice } from '../data/products'
+import { formatPrice, FREE_SHIPPING_FROM } from '../data/products'
 
 export default function Cart() {
-  const { items, updateQuantity, removeItem, total, count } = useCart()
+  const { items, updateQuantity, removeItem, total, shipping, count } = useCart()
 
   if (!items.length) {
     return (
@@ -33,6 +33,7 @@ export default function Cart() {
                   <Link to={`/producto/${item.id}`}>{item.name}</Link>
                 </h3>
                 <p style={{ color: 'var(--muted)' }}>
+                  {item.brand ? `${item.brand} · ` : ''}
                   {item.color} · {item.size}
                 </p>
                 <div className="qty">
@@ -60,13 +61,13 @@ export default function Cart() {
           </div>
           <div className="row">
             <span>Envío</span>
-            <span>{total >= 200000 ? 'Gratis' : formatPrice(12000)}</span>
+            <span>{total === 0 ? '—' : total >= FREE_SHIPPING_FROM ? 'Gratis' : formatPrice(shipping)}</span>
           </div>
           <div className="row total">
             <span>Total</span>
-            <span>{formatPrice(total + (total >= 200000 ? 0 : 12000))}</span>
+            <span>{formatPrice(total + shipping)}</span>
           </div>
-          <Link className="btn btn-accent" to="/checkout" style={{ marginTop: 16 }}>
+          <Link className="btn btn-lime" to="/checkout" style={{ marginTop: 16 }}>
             Continuar al pago
           </Link>
         </aside>

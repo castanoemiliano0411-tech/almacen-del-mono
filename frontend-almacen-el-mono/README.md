@@ -36,4 +36,4 @@ El carrito se guarda en `localStorage` para que la PWA recuerde la bolsa offline
 
 ## Diseño
 
-El archivo de [Figma Make](https://www.figma.com/make/Wjq8DEEPEkD4MerGrcwM17/E-commerce-Fashion-Website) no es público (pide sesión). Esta UI sigue el patrón de esas tiendas de moda: barra de anuncio, tipografía editorial, hero a pantalla, categorías, grilla de producto, ficha y checkout en paleta crema / tinta / terracota.
+La UI sigue el lenguaje de tienda de moda de [Figma Make](https://www.figma.com/make/Wjq8DEEPEkD4MerGrcwM17/E-commerce-Fashion-Website?t=AjMVAMCISs2qzWin-1): fondo negro, tipografía clara, hero a pantalla y acento champagne.
