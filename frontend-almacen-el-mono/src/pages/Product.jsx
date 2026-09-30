@@ -1,11 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { categoryLabels, formatPrice, getProductById, products } from '../data/products'
+import { categoryLabels, formatPrice } from '../data/products'
 import { useCart } from '../context/CartContext'
+import { useCatalog } from '../context/CatalogContext'
+import { useAuth } from '../context/AuthContext'
 import ProductCard from '../components/ProductCard'
+import MediaFrame from '../components/MediaFrame'
+import { isVideoSrc } from '../data/media'
 
 export default function Product() {
   const { id } = useParams()
+  const { products, getProductById } = useCatalog()
+  const { can, isStaff } = useAuth()
   const product = getProductById(id)
   const { addItem } = useCart()
   const [size, setSize] = useState('')
@@ -70,14 +76,14 @@ export default function Product() {
       <div className="pdp">
         <div className="pdp-gallery">
           <div
-            className={`pdp-stage ${zoom.on ? 'is-zoom' : ''}`}
-            onMouseMove={moveZoom}
+            className={`pdp-stage ${zoom.on && !isVideoSrc(current) ? 'is-zoom' : ''}`}
+            onMouseMove={isVideoSrc(current) ? undefined : moveZoom}
             onMouseLeave={() => setZoom({ on: false, x: 50, y: 50 })}
           >
-            <img
+            <MediaFrame
               src={current}
               alt={product.name}
-              style={{ transformOrigin: `${zoom.x}% ${zoom.y}%` }}
+              className={isVideoSrc(current) ? 'pdp-video' : ''}
             />
             {images.length > 1 && (
               <>
@@ -101,7 +107,7 @@ export default function Product() {
                   onClick={() => setActive(index)}
                   onMouseEnter={() => setActive(index)}
                 >
-                  <img src={src} alt="" />
+                  <MediaFrame src={src} alt="" />
                 </button>
               ))}
             </div>
@@ -112,6 +118,18 @@ export default function Product() {
             {product.brand} · {categoryLabels[product.category] || product.category}
           </p>
           <h1 className="display">{product.name}</h1>
+          {isStaff && (
+            <div className="staff-pdp-tools">
+              <p>
+                Vista pública · stock {product.stock}
+                {product.drop ? ' · drop' : ''}
+                {product.promo ? ` · ${product.promo}` : ''}
+              </p>
+              {(can('products') || can('brands')) && <Link to="/admin/productos">Editar en productos</Link>}
+              {(can('stock') || can('sizes')) && <Link to="/admin/inventario">Inventario</Link>}
+              <Link to="/tienda">Ver catálogo completo</Link>
+            </div>
+          )}
           <div className="price">
             <strong>{formatPrice(product.price)}</strong>
             {product.compareAt && <span className="compare">{formatPrice(product.compareAt)}</span>}

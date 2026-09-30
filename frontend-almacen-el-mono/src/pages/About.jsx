@@ -10,7 +10,7 @@ export default function About() {
       <div className="about-layout">
         <div>
           <p style={{ fontSize: '1.12rem', marginBottom: 18 }}>
-            Almacén del Mono hace streetwear en corridas cortas. No hay restock: si el Drop 007 se agota, esa pieza no
+            El Almacén del Mono hace streetwear en corridas cortas. No hay restock: si el Drop 007 se agota, esa pieza no
             vuelve. Por eso el countdown, el -30% real y el “cuando se acaba, no vuelve”.
           </p>
           <p style={{ color: 'var(--muted)' }}>

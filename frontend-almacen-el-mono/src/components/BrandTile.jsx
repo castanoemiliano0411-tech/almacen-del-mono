@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { products } from '../data/products'
 import BrandLogo from './BrandLogos'
+import { useCatalog } from '../context/CatalogContext'
 
 function slug(brand) {
   return brand.toLowerCase().replace(/\s+/g, '-')
@@ -35,15 +35,17 @@ const LOOKS = {
   ],
 }
 
-function brandShots(brand) {
-  const fromCatalog = products
+function brandShots(brand, catalog) {
+  const fromCatalog = catalog
     .filter((item) => item.brand === brand)
     .flatMap((item) => item.images)
   return [...new Set([...fromCatalog, ...(LOOKS[brand] || [])])].slice(0, 4)
 }
 
 export default function BrandTile({ brand, index = 0, to, onClick }) {
-  const shots = useMemo(() => brandShots(brand), [brand])
+  const { products, getBrand } = useCatalog()
+  const meta = getBrand(brand)
+  const shots = useMemo(() => brandShots(brand, products), [brand, products])
   const slides = useMemo(() => ['logo', ...shots], [shots])
   const count = products.filter((item) => item.brand === brand).length
   const [active, setActive] = useState(0)
@@ -76,7 +78,7 @@ export default function BrandTile({ brand, index = 0, to, onClick }) {
     <>
       <div className="brand-slides">
         <div className={`brand-slide brand-logo-slide ${active === 0 ? 'is-on' : ''}`}>
-          <BrandLogo brand={brand} />
+          <BrandLogo brand={brand} image={meta?.image} />
         </div>
         {shots.map((src, shotIndex) => (
           <div

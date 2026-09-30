@@ -3,9 +3,10 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import CartDrawer from './CartDrawer'
+import StaffStoreBar from './StaffStoreBar'
 
 export default function Layout() {
-  const { pathname, search, hash } = useLocation()
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
     if (hash) {
@@ -15,11 +16,12 @@ export default function Layout() {
         return
       }
     }
-    window.scrollTo(0, 0)
-  }, [pathname, search, hash])
+    window.scrollTo({ top: 0, left: 0, behavior: pathname === '/' ? 'smooth' : 'instant' })
+  }, [pathname, hash])
 
   return (
     <div className="app-shell">
+      <StaffStoreBar />
       <Header />
       <main>
         <Outlet />

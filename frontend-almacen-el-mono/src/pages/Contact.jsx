@@ -45,15 +45,25 @@ export default function Contact() {
                   {store.city} · {store.name}
                 </strong>
               </p>
+              <p>{store.municipality}</p>
               <p>{store.address}</p>
-              <p>{store.hours}</p>
-              <a href={store.map} target="_blank" rel="noreferrer">
-                Cómo llegar
-              </a>
+              {(store.hoursLines || [store.hours]).map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              {store.photo ? (
+                <a className="store-map is-contact" href={store.map} target="_blank" rel="noreferrer">
+                  <img src={store.photo} alt={`Mapa del local en ${store.city}`} />
+                  <span>Cómo llegar en Google Maps</span>
+                </a>
+              ) : (
+                <a href={store.map} target="_blank" rel="noreferrer">
+                  Cómo llegar
+                </a>
+              )}
             </div>
           ))}
           <p>hola@almacendelmono.com</p>
-          <a className="btn btn-lime" href={whatsappLink('Hola, Almacén del Mono')} style={{ marginTop: 16 }}>
+          <a className="btn btn-lime" href={whatsappLink('Hola, El Almacén del Mono')} style={{ marginTop: 16 }}>
             WhatsApp {WHATSAPP.display}
           </a>
         </aside>

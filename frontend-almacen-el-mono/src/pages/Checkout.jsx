@@ -1,12 +1,45 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
+import { useCatalog } from '../context/CatalogContext'
 import { formatPrice, FREE_SHIPPING_FROM } from '../data/products'
+import { api } from '../api'
 
 export default function Checkout() {
   const { items, total, clearCart } = useCart()
+  const { user, ready } = useAuth()
+  const { refresh } = useCatalog()
   const [done, setDone] = useState(false)
+  const [error, setError] = useState('')
   const shipping = total >= FREE_SHIPPING_FROM ? 0 : 12000
+
+  if (ready && user && user.role !== 'client') {
+    return (
+      <div className="container empty">
+        <h1 className="display">La compra es para clientes</h1>
+        <Link to="/">Volver a la tienda</Link>
+      </div>
+    )
+  }
+
+  if (ready && !user) {
+    return (
+      <div className="container empty">
+        <p className="eyebrow">Pago</p>
+        <h1 className="display">Creá tu cuenta para pagar</h1>
+        <p style={{ color: 'var(--muted)', margin: '12px 0 24px' }}>
+          Podés ver la tienda sin registrarte. Al crear la cuenta quedás como cliente y recién ahí se confirma el pedido.
+        </p>
+        <Link className="btn btn-lime" to="/registro?next=/checkout">
+          Crear cuenta
+        </Link>
+        <p style={{ marginTop: 16 }}>
+          <Link to="/entrar?next=/checkout">Ya tengo cuenta</Link>
+        </p>
+      </div>
+    )
+  }
 
   if (!items.length && !done) {
     return (
@@ -23,10 +56,10 @@ export default function Checkout() {
         <p className="eyebrow">Pedido confirmado</p>
         <h1 className="display">Gracias por tu compra</h1>
         <p style={{ color: 'var(--muted)', margin: '12px 0 24px' }}>
-          Recibirás un correo con el detalle y, si pediste recoger, te escribimos al WhatsApp cuando esté en el local.
+          El pedido quedó en tu cuenta. Si pediste recoger, te escribimos al WhatsApp.
         </p>
-        <Link className="btn btn-primary" to="/tienda">
-          Seguir viendo
+        <Link className="btn btn-lime" to="/cuenta">
+          Ver mi cuenta
         </Link>
       </div>
     )
@@ -41,19 +74,41 @@ export default function Checkout() {
       <div className="checkout-layout">
         <form
           className="form"
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault()
-            clearCart()
-            setDone(true)
+            const data = new FormData(event.currentTarget)
+            setError('')
+            try {
+              await api('/api/orders', {
+                method: 'POST',
+                body: {
+                  name: data.get('name'),
+                  email: data.get('email'),
+                  address: data.get('address'),
+                  phone: data.get('phone'),
+                  items: items.map((item) => ({
+                    id: item.id,
+                    quantity: item.quantity,
+                    size: item.size,
+                    color: item.color,
+                  })),
+                },
+              })
+              clearCart()
+              await refresh()
+              setDone(true)
+            } catch (err) {
+              setError(err.message)
+            }
           }}
         >
           <label>
             Nombre completo
-            <input name="name" required placeholder="Emiliano" />
+            <input name="name" required defaultValue={user?.name || ''} />
           </label>
           <label>
             Correo
-            <input type="email" name="email" required placeholder="hola@correo.com" />
+            <input type="email" name="email" required defaultValue={user?.email || ''} />
           </label>
           <label>
             Dirección
@@ -63,6 +118,7 @@ export default function Checkout() {
             Teléfono
             <input name="phone" required placeholder="300 000 0000" />
           </label>
+          {error && <p className="form-error">{error}</p>}
           <button className="btn btn-lime" type="submit">
             Confirmar pedido
           </button>

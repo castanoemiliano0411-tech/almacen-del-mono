@@ -2,20 +2,15 @@ import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import BrandTile from '../components/BrandTile'
-import {
-  colorFilters,
-  filterCatalog,
-  getBrands,
-  getProductsByCategory,
-  searchProducts,
-  sizeFilters,
-} from '../data/products'
+import { categories, categoryLabels, colorFilters, sizeFilters } from '../data/products'
+import { useCatalog } from '../context/CatalogContext'
 
 export default function Shop() {
+  const { getBrands, searchProducts, filterCatalog, products } = useCatalog()
   const [params, setParams] = useSearchParams()
-  const current = params.get('categoria') || 'todo'
+  const selectedLines = params.getAll('categoria').filter((id) => id && id !== 'sale')
   const query = params.get('q') || ''
-  const saleOnly = params.get('categoria') === 'sale' || params.get('sale') === '1'
+  const saleOnly = params.get('categoria') === 'sale' || params.getAll('categoria').includes('sale') || params.get('sale') === '1'
   const selectedColors = params.getAll('color')
   const selectedSizes = params.getAll('talla')
   const selectedBrands = params.getAll('marca')
@@ -24,16 +19,16 @@ export default function Shop() {
   const brandView = params.get('vista') === 'marcas' && selectedBrands.length === 0
 
   const list = useMemo(() => {
-    const category = current === 'sale' ? 'todo' : current
-    const base = searchProducts(getProductsByCategory(category), query)
+    const base = searchProducts(products, query)
     return filterCatalog(base, {
       colors: selectedColors,
       sizes: selectedSizes,
       brands: selectedBrands,
+      lines: selectedLines,
       maxPrice,
       saleOnly,
     })
-  }, [current, query, selectedColors, selectedSizes, selectedBrands, maxPrice, saleOnly])
+  }, [query, selectedColors, selectedSizes, selectedBrands, selectedLines, maxPrice, saleOnly, products])
 
   const toggle = (key, value) => {
     const next = new URLSearchParams(params)
@@ -51,20 +46,19 @@ export default function Shop() {
     setParams(next)
   }
 
+  const lineTitle = selectedLines.map((id) => categoryLabels[id] || id).filter(Boolean)
   const title =
     selectedBrands.length === 1
       ? selectedBrands[0]
-      : current === 'sale'
+      : saleOnly && !selectedLines.length && !query
         ? 'Sale'
-        : current === 'drops'
-          ? 'Drops'
-          : current === 'outfits'
-            ? 'Outfits'
-            : brandView
-              ? 'Marcas'
-              : query
-                ? `“${query}”`
-                : 'Tienda'
+        : lineTitle.length
+          ? lineTitle.join(' · ')
+          : brandView
+            ? 'Marcas'
+            : query
+              ? `“${query}”`
+              : 'Tienda'
 
   return (
     <div className="shop-layout">
@@ -91,6 +85,21 @@ export default function Shop() {
         </Link>
 
         <div className="filter-block" style={{ '--i': 0 }}>
+          <p className="filter-label">Línea</p>
+          <p className="filter-hint">Podés marcar varios estilos a la vez.</p>
+          {categories.map((item) => (
+            <label key={item.id} className="check">
+              <input
+                type="checkbox"
+                checked={selectedLines.includes(item.id)}
+                onChange={() => toggle('categoria', item.id)}
+              />
+              {item.name}
+            </label>
+          ))}
+        </div>
+
+        <div className="filter-block" style={{ '--i': 1 }}>
           <p className="filter-label">Marca</p>
           {brands.map((brand) => (
             <label key={brand} className="check">
@@ -104,7 +113,7 @@ export default function Shop() {
           ))}
         </div>
 
-        <div className="filter-block" style={{ '--i': 1 }}>
+        <div className="filter-block" style={{ '--i': 2 }}>
           <p className="filter-label">Color</p>
           {colorFilters.map((color) => (
             <label key={color} className="check">
@@ -118,7 +127,7 @@ export default function Shop() {
           ))}
         </div>
 
-        <div className="filter-block" style={{ '--i': 2 }}>
+        <div className="filter-block" style={{ '--i': 3 }}>
           <p className="filter-label">Talla</p>
           <div className="size-grid">
             {sizeFilters.map((size) => (
@@ -134,7 +143,7 @@ export default function Shop() {
           </div>
         </div>
 
-        <div className="filter-block" style={{ '--i': 3 }}>
+        <div className="filter-block" style={{ '--i': 4 }}>
           <p className="filter-label">
             Precio máx <span>${Math.round(maxPrice / 1000)}k</span>
           </p>
@@ -153,15 +162,17 @@ export default function Shop() {
           </div>
         </div>
 
-        <label className="check sale-check filter-block" style={{ '--i': 4 }}>
+        <label className="check sale-check filter-block" style={{ '--i': 5 }}>
           <input
             type="checkbox"
             checked={saleOnly}
             onChange={() => {
               const next = new URLSearchParams(params)
               if (saleOnly) {
-                if (next.get('categoria') === 'sale') next.delete('categoria')
                 next.delete('sale')
+                const cats = next.getAll('categoria').filter((id) => id !== 'sale')
+                next.delete('categoria')
+                cats.forEach((id) => next.append('categoria', id))
               } else {
                 next.set('sale', '1')
               }

@@ -1,3 +1,5 @@
+import { brandTestCatalog } from './brandTestCatalog.js'
+
 export const FREE_SHIPPING_FROM = 150000
 export const DROP_AT = '2026-09-25T12:00:00-05:00'
 export const DROP_CODE = '007'
@@ -10,7 +12,7 @@ export const categories = [
   { id: 'accesorios', name: 'Accesorios' },
 ]
 
-export const colorFilters = ['Negro', 'Blanco', 'Gris', 'Azul', 'Verde']
+export const colorFilters = ['Negro', 'Blanco', 'Gris', 'Azul', 'Verde', 'Beige']
 export const sizeFilters = ['XS', 'S', 'M', 'L', 'XL', '38', '39', '40', '41', '42', 'Único']
 
 export const products = [
@@ -406,6 +408,7 @@ export const products = [
       'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?auto=format&fit=crop&w=1200&q=80',
     ],
   },
+  ...brandTestCatalog,
 ]
 
 export function formatPrice(value) {
@@ -460,13 +463,21 @@ export function searchProducts(list, query) {
   })
 }
 
-export function filterCatalog(list, { colors = [], sizes = [], brands = [], maxPrice, saleOnly } = {}) {
+export function productMatchesLine(item, lineId) {
+  if (!lineId || lineId === 'todo') return true
+  if (lineId === 'drops' || lineId === 'novedades') return Boolean(item.drop || item.isNew)
+  if (lineId === 'sale') return Boolean(item.promo)
+  return item.category === lineId
+}
+
+export function filterCatalog(list, { colors = [], sizes = [], brands = [], lines = [], maxPrice, saleOnly } = {}) {
   return list.filter((item) => {
     if (saleOnly && !item.promo) return false
     if (maxPrice && item.price > maxPrice) return false
     if (colors.length && !item.colors.some((c) => colors.includes(c))) return false
     if (sizes.length && !item.sizes.some((s) => sizes.includes(s))) return false
     if (brands.length && !brands.includes(item.brand)) return false
+    if (lines.length && !lines.some((line) => productMatchesLine(item, line))) return false
     return true
   })
 }
