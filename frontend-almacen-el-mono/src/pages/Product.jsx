@@ -22,6 +22,8 @@ export default function Product() {
   const [added, setAdded] = useState(false)
   const [active, setActive] = useState(0)
   const [zoom, setZoom] = useState({ on: false, x: 50, y: 50 })
+  const [lens, setLens] = useState(false)
+  const [lensScale, setLensScale] = useState(2)
 
   useEffect(() => {
     if (!product) return
@@ -30,7 +32,15 @@ export default function Product() {
     setQuantity(1)
     setAdded(false)
     setActive(0)
+    setLens(false)
   }, [product])
+
+  useEffect(() => {
+    document.body.style.overflow = lens ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [lens])
 
   const related = useMemo(
     () => products.filter((item) => item.category === product?.category && item.id !== product?.id).slice(0, 3),
@@ -69,6 +79,13 @@ export default function Product() {
     })
   }
 
+  const moveLens = (event) => {
+    const box = event.currentTarget.getBoundingClientRect()
+    const x = ((event.clientX - box.left) / box.width) * 100
+    const y = ((event.clientY - box.top) / box.height) * 100
+    setZoom((current) => ({ ...current, x, y }))
+  }
+
   const step = (dir) => {
     setActive((currentIndex) => (currentIndex + dir + images.length) % images.length)
   }
@@ -86,6 +103,11 @@ export default function Product() {
               src={current}
               alt={product.name}
               className={isVideoSrc(current) ? 'pdp-video' : ''}
+              style={
+                zoom.on && !isVideoSrc(current)
+                  ? { transformOrigin: `${zoom.x}% ${zoom.y}%` }
+                  : undefined
+              }
             />
             {images.length > 1 && (
               <>
@@ -97,7 +119,16 @@ export default function Product() {
                 </button>
               </>
             )}
-            <span className="pdp-hint desktop-only">{zoom.on ? 'Mueve el mouse para acercar' : 'Pasa el mouse para zoom'}</span>
+            {!isVideoSrc(current) && (
+              <button
+                type="button"
+                className="pdp-zoom-btn"
+                onClick={() => setLens(true)}
+              >
+                Zoom
+              </button>
+            )}
+            <span className="pdp-hint desktop-only">{zoom.on ? 'Mueve el mouse para acercar' : 'Pasa el mouse o tocá Zoom'}</span>
           </div>
           {images.length > 1 && (
             <div className="pdp-thumbs">
@@ -217,7 +248,38 @@ export default function Product() {
         </section>
       )}
 
-      {added && <div className="toast">Añadido a la bolsa</div>}
+      {lens && !isVideoSrc(current) && (
+        <div className="zoom-layer">
+          <div className="zoom-layer-bar">
+            <p>Arrastrá para ver de cerca</p>
+            <button type="button" className="btn btn-lime" onClick={() => setLens(false)}>
+              Cerrar
+            </button>
+          </div>
+          <div
+            className="zoom-layer-stage"
+            onPointerMove={moveLens}
+            onPointerDown={moveLens}
+          >
+            <MediaFrame
+              src={current}
+              alt={product.name}
+              style={{ transform: `scale(${lensScale})`, transformOrigin: `${zoom.x}% ${zoom.y}%` }}
+            />
+          </div>
+          <label className="zoom-layer-range">
+            Acercar
+            <input
+              type="range"
+              min="1.2"
+              max="3.2"
+              step="0.1"
+              value={lensScale}
+              onChange={(event) => setLensScale(Number(event.target.value))}
+            />
+          </label>
+        </div>
+      )}
     </div>
   )
 }

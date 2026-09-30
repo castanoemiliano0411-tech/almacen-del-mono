@@ -5,6 +5,28 @@ const GENDERS = [
   { id: 'mujer', name: 'Mujer' },
 ]
 
+function Pills({ items, selected, onToggle, keyName }) {
+  return (
+    <div className="filter-pills">
+      {items.map((item) => {
+        const id = item.id || item
+        const label = item.name || item
+        const on = selected.includes(id)
+        return (
+          <button
+            key={id}
+            type="button"
+            className={`filter-pill ${on ? 'is-on' : ''}`}
+            onClick={() => onToggle(keyName, id)}
+          >
+            {label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function FilterPanel({
   brands,
   selectedLines,
@@ -26,41 +48,64 @@ export default function FilterPanel({
   const brandList = FEATURED_BRANDS.filter((name) => brands.includes(name)).concat(
     brands.filter((name) => !FEATURED_BRANDS.includes(name)),
   )
+  const sheet = Boolean(onApply)
 
   return (
-    <div className="filter-panel">
-      <div className="filter-block">
+    <div className={`filter-panel ${sheet ? 'is-sheet' : ''}`}>
+      {sheet && (
+        <p className="filter-guide">
+          Tocá todo lo que quieras a la vez: hombre y mujer, dos marcas, varias tallas. Lo marcado se pone lima.
+        </p>
+      )}
+
+      <div className="filter-block" style={{ '--i': 0 }}>
         <p className="filter-label">Categoría</p>
-        {GENDERS.map((item) => (
-          <label key={item.id} className="check">
-            <input type="checkbox" checked={selectedLines.includes(item.id)} onChange={() => onToggle('categoria', item.id)} />
-            {item.name}
-          </label>
-        ))}
+        {sheet && <p className="filter-hint">Podés marcar las dos.</p>}
+        {sheet ? (
+          <Pills items={GENDERS} selected={selectedLines} onToggle={onToggle} keyName="categoria" />
+        ) : (
+          GENDERS.map((item) => (
+            <label key={item.id} className="check">
+              <input type="checkbox" checked={selectedLines.includes(item.id)} onChange={() => onToggle('categoria', item.id)} />
+              {item.name}
+            </label>
+          ))
+        )}
       </div>
 
-      <div className="filter-block">
+      <div className="filter-block" style={{ '--i': 1 }}>
         <p className="filter-label">Marca</p>
-        {brandList.map((brand) => (
-          <label key={brand} className="check">
-            <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => onToggle('marca', brand)} />
-            {brand}
-          </label>
-        ))}
+        {sheet && <p className="filter-hint">Nike, Adidas y las que haya en tienda. Varias a la vez.</p>}
+        {sheet ? (
+          <Pills items={brandList} selected={selectedBrands} onToggle={onToggle} keyName="marca" />
+        ) : (
+          brandList.map((brand) => (
+            <label key={brand} className="check">
+              <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => onToggle('marca', brand)} />
+              {brand}
+            </label>
+          ))
+        )}
       </div>
 
-      <div className="filter-block">
+      <div className="filter-block" style={{ '--i': 2 }}>
         <p className="filter-label">Tipo de producto</p>
-        {PRODUCT_KINDS.map((item) => (
-          <label key={item.id} className="check">
-            <input type="checkbox" checked={selectedKinds.includes(item.id)} onChange={() => onToggle('tipo', item.id)} />
-            {item.name}
-          </label>
-        ))}
+        {sheet && <p className="filter-hint">Calzado, ropa, gorras… combiná sin problema.</p>}
+        {sheet ? (
+          <Pills items={PRODUCT_KINDS} selected={selectedKinds} onToggle={onToggle} keyName="tipo" />
+        ) : (
+          PRODUCT_KINDS.map((item) => (
+            <label key={item.id} className="check">
+              <input type="checkbox" checked={selectedKinds.includes(item.id)} onChange={() => onToggle('tipo', item.id)} />
+              {item.name}
+            </label>
+          ))
+        )}
       </div>
 
-      <div className="filter-block">
+      <div className="filter-block" style={{ '--i': 3 }}>
         <p className="filter-label">Talla</p>
+        {sheet && <p className="filter-hint">Elegí todas las que uses.</p>}
         <div className="size-grid">
           {sizeFilters.map((size) => (
             <button
@@ -75,7 +120,7 @@ export default function FilterPanel({
         </div>
       </div>
 
-      <div className="filter-block">
+      <div className="filter-block" style={{ '--i': 4 }}>
         <p className="filter-label">
           Precio <span>{Math.round(minPrice / 1000)}k – {Math.round(maxPrice / 1000)}k</span>
         </p>
@@ -89,7 +134,7 @@ export default function FilterPanel({
         </label>
       </div>
 
-      <div className="filter-block">
+      <div className="filter-block" style={{ '--i': 5 }}>
         <p className="filter-label">Ordenar por</p>
         <select className="sort-select" value={orden} onChange={(event) => onOrden(event.target.value)}>
           <option value="recientes">Más recientes</option>
@@ -98,18 +143,17 @@ export default function FilterPanel({
         </select>
       </div>
 
-      <label className="check sale-check">
-        <input type="checkbox" checked={saleOnly} onChange={onSale} />
+      <button type="button" className={`filter-pill sale-pill ${saleOnly ? 'is-on' : ''}`} onClick={onSale}>
         Solo ofertas
-      </label>
+      </button>
 
       {onApply && (
         <div className="filter-sheet-actions">
           <button type="button" className="btn btn-lime" onClick={onApply}>
-            Aplicar filtros
+            Ver productos
           </button>
           <button type="button" className="btn btn-ghost" onClick={onClear}>
-            Limpiar filtros
+            Limpiar todo
           </button>
         </div>
       )}

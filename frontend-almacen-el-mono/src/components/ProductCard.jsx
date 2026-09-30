@@ -50,7 +50,6 @@ export default function ProductCard({ product, preview = false }) {
           </span>
         )}
         {preview && <span className="preview-badge">Así se ve en la tienda · aún no publicado</span>}
-        {!preview && <FavButton id={product.id} className="fav-on-card" />}
         {!preview && (
           <div className="product-reveal">
             <p>{(product.colors || []).join(' · ')}</p>
@@ -75,6 +74,7 @@ export default function ProductCard({ product, preview = false }) {
           </div>
         )}
       </div>
+      {!preview && <FavButton id={product.id} className="fav-on-card" />}
       <p className="product-brand">{product.brand || 'Marca'}</p>
       <h3>{product.name || 'Nombre del producto'}</h3>
       <div className="price">

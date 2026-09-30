@@ -214,10 +214,14 @@ export default function Shop() {
 
       {sheetOpen && (
         <div className="filter-sheet-root">
-          <button type="button" className="nav-backdrop" aria-label="Cerrar filtros" onClick={() => setSheetOpen(false)} />
+          <button type="button" className="filter-sheet-backdrop" aria-label="Cerrar filtros" onClick={() => setSheetOpen(false)} />
           <aside className="filter-sheet" role="dialog" aria-label="Filtros">
+            <div className="filter-sheet-handle" aria-hidden="true" />
             <header className="filter-sheet-head">
-              <h2>Filtros</h2>
+              <div>
+                <p className="eyebrow">Armá tu búsqueda</p>
+                <h2>Filtros</h2>
+              </div>
               <button type="button" className="icon-btn" onClick={() => setSheetOpen(false)} aria-label="Cerrar">
                 ×
               </button>

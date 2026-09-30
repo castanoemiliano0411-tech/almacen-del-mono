@@ -595,6 +595,8 @@ button {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  position: relative;
+  overflow: visible;
 }
 
 .product-card.is-preview {
