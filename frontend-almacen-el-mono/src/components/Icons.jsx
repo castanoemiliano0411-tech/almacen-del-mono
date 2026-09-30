@@ -38,9 +38,9 @@ export function IconEye() {
 
 export function IconHeart({ filled = false }) {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" overflow="visible">
-      <path d="M12 19.4 5.4 13.2A4.4 4.4 0 1 1 12 7.2a4.4 4.4 0 1 1 6.6 6L12 19.4Z" />
-    </svg>
+    <span className={`icon-heart${filled ? ' is-filled' : ''}`} aria-hidden="true">
+      ♥
+    </span>
   )
 }
 

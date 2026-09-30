@@ -107,6 +107,14 @@ export default function Shop() {
     setSheetOpen(false)
   }
 
+  const filterCount =
+    selectedLines.length +
+    selectedKinds.length +
+    selectedBrands.length +
+    selectedSizes.length +
+    Number(saleOnly) +
+    Number(minPrice > 0) +
+    Number(maxPrice < 620000)
   const lineTitle = selectedLines.map((id) => categoryLabels[id] || id).filter(Boolean)
   const title =
     selectedBrands.length === 1
@@ -168,7 +176,7 @@ export default function Shop() {
         <CategoryRail />
         <div className="shop-toolbar">
           <button type="button" className="btn btn-ghost filter-trigger" onClick={() => setSheetOpen(true)}>
-            ☰ Filtros
+            ☰ Filtros{filterCount ? ` (${filterCount})` : ''}
           </button>
           <label className="sort-inline">
             Ordenar
@@ -219,14 +227,26 @@ export default function Shop() {
             <div className="filter-sheet-handle" aria-hidden="true" />
             <header className="filter-sheet-head">
               <div>
-                <p className="eyebrow">Armá tu búsqueda</p>
+                <p className="eyebrow">Marcá varios a la vez</p>
                 <h2>Filtros</h2>
+                {filterCount > 0 && <p className="filter-count">{filterCount} activos</p>}
               </div>
-              <button type="button" className="icon-btn" onClick={() => setSheetOpen(false)} aria-label="Cerrar">
+              <button type="button" className="icon-btn filter-close" onClick={() => setSheetOpen(false)} aria-label="Cerrar">
                 ×
               </button>
             </header>
+            <p className="filter-guide">
+              Tocá todo lo que quieras a la vez: hombre y mujer, dos marcas, varias tallas. Lo marcado se pone lima.
+            </p>
             <FilterPanel {...filterProps} onApply={() => setSheetOpen(false)} />
+            <div className="filter-sheet-actions">
+              <button type="button" className="btn btn-lime" onClick={() => setSheetOpen(false)}>
+                Ver productos
+              </button>
+              <button type="button" className="btn btn-ghost" onClick={clearFilters}>
+                Limpiar todo
+              </button>
+            </div>
           </aside>
         </div>
       )}

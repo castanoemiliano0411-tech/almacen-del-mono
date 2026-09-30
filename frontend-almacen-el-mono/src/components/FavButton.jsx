@@ -15,7 +15,9 @@ export default function FavButton({ id, className = '' }) {
         toggle(id)
       }}
     >
-      <IconHeart filled={on} />
+      <span className="fav-disc">
+        <IconHeart filled={on} />
+      </span>
     </button>
   )
 }

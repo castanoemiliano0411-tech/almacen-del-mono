@@ -52,12 +52,6 @@ export default function FilterPanel({
 
   return (
     <div className={`filter-panel ${sheet ? 'is-sheet' : ''}`}>
-      {sheet && (
-        <p className="filter-guide">
-          Tocá todo lo que quieras a la vez: hombre y mujer, dos marcas, varias tallas. Lo marcado se pone lima.
-        </p>
-      )}
-
       <div className="filter-block" style={{ '--i': 0 }}>
         <p className="filter-label">Categoría</p>
         {sheet && <p className="filter-hint">Podés marcar las dos.</p>}
@@ -106,18 +100,22 @@ export default function FilterPanel({
       <div className="filter-block" style={{ '--i': 3 }}>
         <p className="filter-label">Talla</p>
         {sheet && <p className="filter-hint">Elegí todas las que uses.</p>}
-        <div className="size-grid">
-          {sizeFilters.map((size) => (
-            <button
-              key={size}
-              type="button"
-              className={`size-chip ${selectedSizes.includes(size) ? 'active' : ''}`}
-              onClick={() => onToggle('talla', size)}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
+        {sheet ? (
+          <Pills items={sizeFilters} selected={selectedSizes} onToggle={onToggle} keyName="talla" />
+        ) : (
+          <div className="size-grid">
+            {sizeFilters.map((size) => (
+              <button
+                key={size}
+                type="button"
+                className={`size-chip ${selectedSizes.includes(size) ? 'active' : ''}`}
+                onClick={() => onToggle('talla', size)}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="filter-block" style={{ '--i': 4 }}>
@@ -146,17 +144,6 @@ export default function FilterPanel({
       <button type="button" className={`filter-pill sale-pill ${saleOnly ? 'is-on' : ''}`} onClick={onSale}>
         Solo ofertas
       </button>
-
-      {onApply && (
-        <div className="filter-sheet-actions">
-          <button type="button" className="btn btn-lime" onClick={onApply}>
-            Ver productos
-          </button>
-          <button type="button" className="btn btn-ghost" onClick={onClear}>
-            Limpiar todo
-          </button>
-        </div>
-      )}
     </div>
   )
 }

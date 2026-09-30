@@ -8,10 +8,3 @@ export default function MediaFrame({ src, alt = '', className = '', style }) {
   }
   return <img className={className} src={url} alt={alt} style={style} />
 }
-  const url = mediaUrl(src)
-  if (!url) return null
-  if (isVideoSrc(src) || isVideoSrc(url)) {
-    return <video className={className} src={url} muted loop playsInline autoPlay />
-  }
-  return <img className={className} src={url} alt={alt} />
-}
