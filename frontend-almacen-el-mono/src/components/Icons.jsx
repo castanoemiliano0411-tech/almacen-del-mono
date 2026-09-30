@@ -38,9 +38,15 @@ export function IconEye() {
 
 export function IconHeart({ filled = false }) {
   return (
-    <span className={`icon-heart${filled ? ' is-filled' : ''}`} aria-hidden="true">
-      ♥
-    </span>
+    <svg className="icon-heart" width="22" height="22" viewBox="0 0 24 24" overflow="visible" aria-hidden="true">
+      <path
+        fill={filled ? '#d6ff2a' : 'none'}
+        stroke="#d6ff2a"
+        strokeWidth="1.85"
+        strokeLinejoin="round"
+        d="M12 7.2c.85-1.7 2.55-2.85 4.45-2.85 2.85 0 5.05 2.2 5.05 5.05 0 5.4-5.7 8.85-9.5 12.1C8.2 18.25 2.5 14.8 2.5 9.4c0-2.85 2.2-5.05 5.05-5.05 1.9 0 3.6 1.15 4.45 2.85Z"
+      />
+    </svg>
   )
 }
 

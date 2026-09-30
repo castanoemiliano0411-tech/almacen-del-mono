@@ -230,28 +230,10 @@ button {
 
 .icon-heart {
   display: block;
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-  line-height: 18px;
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: 700;
+  width: 20px;
+  height: 20px;
   overflow: visible;
-}
-
-.icon-heart:not(.is-filled) {
-  color: transparent;
-  -webkit-text-stroke: 1.55px #fff;
-}
-
-.fav-header .icon-heart:not(.is-filled) {
-  -webkit-text-stroke-color: #fff;
-}
-
-.icon-heart.is-filled {
-  color: inherit;
-  -webkit-text-stroke: 0;
+  flex-shrink: 0;
 }
 
 .badge {
