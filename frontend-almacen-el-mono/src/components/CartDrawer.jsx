@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { formatPrice, FREE_SHIPPING_FROM } from '../data/products'
-import { useEffect } from 'react'
+import { mediaUrl } from '../data/media'
 
 export default function CartDrawer() {
   const { items, updateQuantity, removeItem, total, shipping, count, open, closeCart } = useCart()
@@ -35,7 +36,7 @@ export default function CartDrawer() {
           ) : (
             items.map((item) => (
               <article className="cart-drawer-item" key={item.key}>
-                <img src={item.image} alt={item.name} />
+                <img src={mediaUrl(item.image)} alt={item.name} />
                 <div>
                   {item.brand && <p className="product-brand">{item.brand}</p>}
                   <h3>

@@ -7,6 +7,7 @@ import StoresStrip from '../components/StoresStrip'
 import { api } from '../api'
 import { useCatalog } from '../context/CatalogContext'
 import { useAuth } from '../context/AuthContext'
+import CategoryRail from '../components/CategoryRail'
 import MediaFrame from '../components/MediaFrame'
 
 export default function Home() {
@@ -67,6 +68,12 @@ export default function Home() {
             <i />
           </div>
         </div>
+      </section>
+
+      <section className="home-mobile-intro">
+        <h1>Almacén El Mono</h1>
+        <p>Encuentra tu estilo en un solo lugar.</p>
+        <CategoryRail />
       </section>
 
       <section className="trust-bar">

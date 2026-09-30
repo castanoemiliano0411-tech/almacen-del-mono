@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { formatPrice, FREE_SHIPPING_FROM } from '../data/products'
+import { mediaUrl } from '../data/media'
 
 export default function Cart() {
   const { items, updateQuantity, removeItem, total, shipping, count } = useCart()
@@ -27,7 +28,7 @@ export default function Cart() {
         <div>
           {items.map((item) => (
             <article className="cart-item" key={item.key}>
-              <img src={item.image} alt={item.name} />
+              <img src={mediaUrl(item.image)} alt={item.name} />
               <div>
                 <h3>
                   <Link to={`/producto/${item.id}`}>{item.name}</Link>

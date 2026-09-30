@@ -455,12 +455,43 @@ export function searchProducts(list, query) {
   const term = query.trim().toLowerCase()
   if (!term) return list
   return list.filter((item) => {
-    const haystack = [item.name, item.brand, item.category, categoryLabels[item.category], item.description]
+    const kind = productKind(item)
+    const haystack = [
+      item.name,
+      item.brand,
+      item.category,
+      categoryLabels[item.category],
+      kind,
+      KIND_LABELS[kind],
+      item.description,
+    ]
       .filter(Boolean)
       .join(' ')
       .toLowerCase()
     return haystack.includes(term)
   })
+}
+
+const SHOE_SIZES = new Set(['38', '39', '40', '41', '42'])
+
+export const PRODUCT_KINDS = [
+  { id: 'calzado', name: 'Calzado' },
+  { id: 'ropa', name: 'Ropa' },
+  { id: 'gorras', name: 'Gorras' },
+  { id: 'accesorios', name: 'Accesorios' },
+  { id: 'relojes', name: 'Relojes' },
+]
+
+export const KIND_LABELS = Object.fromEntries(PRODUCT_KINDS.map((item) => [item.id, item.name]))
+
+export function productKind(item) {
+  if (item?.kind) return item.kind
+  const blob = `${item?.name || ''} ${item?.description || ''}`.toLowerCase()
+  if (/reloj/.test(blob)) return 'relojes'
+  if (/gorra|cap\b|beanie|visor/.test(blob)) return 'gorras'
+  if (item?.category === 'accesorios') return 'accesorios'
+  if ((item?.sizes || []).some((size) => SHOE_SIZES.has(String(size)))) return 'calzado'
+  return 'ropa'
 }
 
 export function productMatchesLine(item, lineId) {
@@ -470,14 +501,32 @@ export function productMatchesLine(item, lineId) {
   return item.category === lineId
 }
 
-export function filterCatalog(list, { colors = [], sizes = [], brands = [], lines = [], maxPrice, saleOnly } = {}) {
+export function filterCatalog(
+  list,
+  { colors = [], sizes = [], brands = [], lines = [], kinds = [], minPrice = 0, maxPrice, saleOnly } = {},
+) {
   return list.filter((item) => {
     if (saleOnly && !item.promo) return false
+    if (minPrice && item.price < minPrice) return false
     if (maxPrice && item.price > maxPrice) return false
     if (colors.length && !item.colors.some((c) => colors.includes(c))) return false
     if (sizes.length && !item.sizes.some((s) => sizes.includes(s))) return false
     if (brands.length && !brands.includes(item.brand)) return false
     if (lines.length && !lines.some((line) => productMatchesLine(item, line))) return false
+    if (kinds.length && !kinds.includes(productKind(item))) return false
     return true
   })
+}
+
+export function sortCatalog(list, orden) {
+  const next = [...list]
+  if (orden === 'precio-asc') next.sort((a, b) => a.price - b.price)
+  else if (orden === 'precio-desc') next.sort((a, b) => b.price - a.price)
+  else {
+    next.sort((a, b) => {
+      const score = (item) => Number(Boolean(item.isNew)) + Number(Boolean(item.drop)) * 2
+      return score(b) - score(a)
+    })
+  }
+  return next
 }

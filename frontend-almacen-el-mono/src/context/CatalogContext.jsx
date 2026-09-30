@@ -3,6 +3,7 @@ import { api } from '../api'
 import {
   FEATURED_BRANDS,
   filterCatalog,
+  sortCatalog,
   products as localProducts,
   searchProducts,
 } from '../data/products'
@@ -83,6 +84,7 @@ export function CatalogProvider({ children }) {
       },
       searchProducts,
       filterCatalog,
+      sortCatalog,
     }),
     [products, brands, storeBrands],
   )

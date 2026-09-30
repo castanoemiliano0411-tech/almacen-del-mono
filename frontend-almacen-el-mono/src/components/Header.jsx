@@ -1,28 +1,29 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useCatalog } from '../context/CatalogContext'
-import { categories } from '../data/products'
-import { IconBag, IconMenu, IconSearch } from './Icons'
-
-const SEARCH_CATEGORIES = [...categories, { id: 'sale', name: 'Sale' }]
+import { useFavorites } from '../context/FavoritesContext'
+import { CLIENT_MENU } from '../data/shopNav'
+import { IconBag, IconHeart, IconMenu, IconSearch } from './Icons'
 
 const CATEGORY_QUERY = {
   mujer: 'mujer',
   dama: 'mujer',
-  damas: 'mujer',
   hombre: 'hombre',
   caballero: 'hombre',
-  accesorios: 'accesorios',
-  outfits: 'outfits',
-  drops: 'drops',
-  drop: 'drops',
-  sale: 'sale',
+  accesorios: 'tipo=accesorios',
+  calzado: 'tipo=calzado',
+  ropa: 'tipo=ropa',
+  gorras: 'tipo=gorras',
+  relojes: 'tipo=relojes',
+  ofertas: 'sale=1',
+  sale: 'sale=1',
 }
 
 export default function Header() {
   const { count, openCart } = useCart()
+  const { count: favCount } = useFavorites()
   const { user } = useAuth()
   const { getBrands } = useCatalog()
   const brands = getBrands()
@@ -33,32 +34,17 @@ export default function Header() {
   const navigate = useNavigate()
   const taps = useRef({ count: 0, at: 0 })
 
+  useEffect(() => {
+    document.body.classList.toggle('nav-lock', open)
+    return () => document.body.classList.remove('nav-lock')
+  }, [open])
+
+  const close = () => setOpen(false)
+
   const goShop = (search) => {
     navigate(search ? `/tienda?${search}` : '/tienda')
     setSearchOpen(false)
-    setOpen(false)
-  }
-
-  const toggleLine = (id) => {
-    const next = new URLSearchParams(params)
-    if (id === 'sale') {
-      if (next.get('sale') === '1' || next.getAll('categoria').includes('sale')) {
-        next.delete('sale')
-        const cats = next.getAll('categoria').filter((item) => item !== 'sale')
-        next.delete('categoria')
-        cats.forEach((item) => next.append('categoria', item))
-      } else {
-        next.set('sale', '1')
-      }
-    } else {
-      const values = next.getAll('categoria').filter((item) => item !== 'sale')
-      next.delete('categoria')
-      const has = values.includes(id)
-      const updated = has ? values.filter((item) => item !== id) : [...values, id]
-      updated.forEach((item) => next.append('categoria', item))
-    }
-    navigate(`/tienda?${next.toString()}`)
-    setOpen(false)
+    close()
   }
 
   const submitSearch = (event) => {
@@ -70,24 +56,43 @@ export default function Header() {
     }
     const mapped = CATEGORY_QUERY[next.toLowerCase()]
     if (mapped) {
-      goShop(`categoria=${encodeURIComponent(mapped)}`)
+      goShop(mapped.includes('=') ? mapped : `categoria=${mapped}`)
       return
     }
     goShop(`q=${encodeURIComponent(next)}`)
   }
 
+  const menuItem = (item) => {
+    if (item.cart) {
+      return (
+        <button
+          key={item.label}
+          type="button"
+          className="mobile-drawer-link"
+          onClick={() => {
+            close()
+            openCart()
+          }}
+        >
+          {item.label}
+        </button>
+      )
+    }
+    return (
+      <Link key={item.to} to={item.to} className="mobile-drawer-link" onClick={close}>
+        {item.label}
+      </Link>
+    )
+  }
+
   return (
     <header className="header">
       <div className="header-inner">
-        <button className="icon-btn menu-btn" type="button" aria-label="Menú" onClick={() => setOpen((v) => !v)}>
-          <IconMenu open={open} />
-        </button>
-
         <Link
           to="/"
           className="brand"
           onClick={(event) => {
-            setOpen(false)
+            close()
             const now = Date.now()
             if (now - taps.current.at > 1600) taps.current.count = 0
             taps.current.at = now
@@ -99,8 +104,12 @@ export default function Header() {
             }
           }}
         >
-          <span className="brand-lead">El Almacén del</span>
-          <span className="brand-mono">Mono</span>
+          <span className="brand-lockup">
+            <span className="brand-line1">El Almacén</span>
+            <span className="brand-line2">
+              del <span className="brand-mono">Mono</span>
+            </span>
+          </span>
         </Link>
 
         <nav className="nav" aria-label="Marcas">
@@ -113,24 +122,31 @@ export default function Header() {
 
         <div className="header-actions">
           {user?.role === 'client' ? (
-            <NavLink className="account-link" to="/cuenta">
+            <NavLink className="account-link desktop-only" to="/cuenta">
               Cuenta
             </NavLink>
           ) : user?.role === 'admin' || user?.role === 'worker' ? (
-            <NavLink className="account-link" to="/admin/inicio">
+            <NavLink className="account-link desktop-only" to="/admin/inicio">
               Operaciones
             </NavLink>
           ) : (
-            <NavLink className="account-link" to="/entrar">
+            <NavLink className="account-link desktop-only" to="/entrar">
               Entrar
             </NavLink>
           )}
           <button className="icon-btn" type="button" aria-label="Buscar" onClick={() => setSearchOpen((v) => !v)}>
             <IconSearch />
           </button>
+          <Link className="icon-btn fav-header" to="/favoritos" aria-label="Favoritos">
+            <IconHeart filled={favCount > 0} />
+            {favCount > 0 && <span className="badge">{favCount}</span>}
+          </Link>
           <button className="icon-btn cart-trigger" type="button" aria-label="Carrito" onClick={openCart}>
             <IconBag />
             {count > 0 && <span className="badge">{count}</span>}
+          </button>
+          <button className="icon-btn menu-btn" type="button" aria-label="Menú" onClick={() => setOpen((v) => !v)}>
+            <IconMenu open={open} />
           </button>
         </div>
       </div>
@@ -143,63 +159,33 @@ export default function Header() {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscá mujer, hombre, una marca o un producto…"
-              aria-label="Buscar prendas"
+              placeholder="Buscar por nombre, marca o categoría"
+              aria-label="Buscar productos"
             />
             <button className="btn btn-lime" type="submit">
               Buscar
             </button>
           </form>
-          <div className="search-chips" aria-label="Filtrar por línea">
-            {SEARCH_CATEGORIES.map((item) => {
-              const on =
-                item.id === 'sale'
-                  ? params.get('sale') === '1' || params.getAll('categoria').includes('sale')
-                  : params.getAll('categoria').includes(item.id)
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`search-chip ${on ? 'is-on' : ''}`}
-                  onClick={() => toggleLine(item.id)}
-                >
-                  {item.name}
-                </button>
-              )
-            })}
-          </div>
         </div>
       )}
 
-      <nav className={`mobile-nav ${open ? 'open' : ''}`}>
-        {brands.map((brand) => (
-          <Link key={brand} to={`/tienda?marca=${encodeURIComponent(brand)}`} onClick={() => setOpen(false)}>
-            {brand}
-          </Link>
-        ))}
-        <NavLink to="/nosotros" onClick={() => setOpen(false)}>
-          Nosotros
-        </NavLink>
-        <NavLink to="/contacto" onClick={() => setOpen(false)}>
-          Contacto
-        </NavLink>
+      {open && <button type="button" className="nav-backdrop" aria-label="Cerrar menú" onClick={close} />}
+      <nav className={`mobile-drawer ${open ? 'open' : ''}`} aria-label="Menú">
+        <p className="mobile-drawer-title">Almacén El Mono</p>
+        {CLIENT_MENU.map(menuItem)}
         {user?.role === 'client' ? (
-          <NavLink to="/cuenta" onClick={() => setOpen(false)}>
-            Cuenta
+          <NavLink to="/cuenta" className="mobile-drawer-link" onClick={close}>
+            Mi cuenta
           </NavLink>
-        ) : user?.role === 'admin' || user?.role === 'worker' ? (
+        ) : (
           <>
-            <NavLink to="/admin/inicio" onClick={() => setOpen(false)}>
-              Operaciones
+            <NavLink to="/entrar" className="mobile-drawer-link" onClick={close}>
+              Iniciar sesión
             </NavLink>
-            <NavLink to="/tienda?vista=marcas" onClick={() => setOpen(false)}>
-              Ver tienda
+            <NavLink to="/registro" className="mobile-drawer-link" onClick={close}>
+              Crear cuenta
             </NavLink>
           </>
-        ) : (
-          <NavLink to="/entrar" onClick={() => setOpen(false)}>
-            Entrar
-          </NavLink>
         )}
       </nav>
     </header>

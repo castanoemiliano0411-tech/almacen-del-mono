@@ -4,6 +4,7 @@ import { categoryLabels, formatPrice } from '../data/products'
 import { useCart } from '../context/CartContext'
 import { useCatalog } from '../context/CatalogContext'
 import { useAuth } from '../context/AuthContext'
+import { useFavorites } from '../context/FavoritesContext'
 import ProductCard from '../components/ProductCard'
 import MediaFrame from '../components/MediaFrame'
 import { isVideoSrc } from '../data/media'
@@ -14,6 +15,7 @@ export default function Product() {
   const { can, isStaff } = useAuth()
   const product = getProductById(id)
   const { addItem } = useCart()
+  const { has, toggle } = useFavorites()
   const [size, setSize] = useState('')
   const [color, setColor] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -95,7 +97,7 @@ export default function Product() {
                 </button>
               </>
             )}
-            <span className="pdp-hint">{zoom.on ? 'Mueve el mouse para acercar' : 'Pasa el mouse para zoom'}</span>
+            <span className="pdp-hint desktop-only">{zoom.on ? 'Mueve el mouse para acercar' : 'Pasa el mouse para zoom'}</span>
           </div>
           {images.length > 1 && (
             <div className="pdp-thumbs">
@@ -183,9 +185,14 @@ export default function Product() {
               +
             </button>
           </div>
-          <button className="btn btn-lime" type="button" onClick={onAdd}>
-            Añadir {color} / {size}
-          </button>
+          <div className="pdp-buy">
+            <button className="btn btn-lime" type="button" onClick={onAdd}>
+              🛒 {added ? 'Añadido' : 'Agregar al carrito'}
+            </button>
+            <button className="btn btn-ghost" type="button" onClick={() => toggle(product.id)}>
+              {has(product.id) ? '♡ En favoritos' : '♡ Guardar en favoritos'}
+            </button>
+          </div>
           <ul className="details-list">
             {product.details.map((detail) => (
               <li key={detail}>{detail}</li>

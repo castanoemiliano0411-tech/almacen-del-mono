@@ -4,17 +4,7 @@ import { formatPrice } from '../data/products'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import MediaFrame from './MediaFrame'
-
-const swatch = {
-  Negro: '#111',
-  Blanco: '#f4f4f4',
-  Gris: '#8a8a8a',
-  Azul: '#3b6ea8',
-  Verde: '#3f7a4a',
-  Rojo: '#c1121f',
-  Amarillo: '#e8c547',
-  Beige: '#cbb79a',
-}
+import FavButton from './FavButton'
 
 export default function ProductCard({ product, preview = false }) {
   const { addItem } = useCart()
@@ -60,6 +50,7 @@ export default function ProductCard({ product, preview = false }) {
           </span>
         )}
         {preview && <span className="preview-badge">Así se ve en la tienda · aún no publicado</span>}
+        {!preview && <FavButton id={product.id} className="fav-on-card" />}
         {!preview && (
           <div className="product-reveal">
             <p>{(product.colors || []).join(' · ')}</p>
@@ -90,11 +81,9 @@ export default function ProductCard({ product, preview = false }) {
         <span>{formatPrice(Number(product.price) || 0)}</span>
         {product.compareAt && <span className="compare">{formatPrice(product.compareAt)}</span>}
       </div>
-      <div className="card-swatches" aria-hidden="true">
-        {(product.colors || []).map((color) => (
-          <i key={color} style={{ background: swatch[color] || '#555' }} title={color} />
-        ))}
-      </div>
+      {(product.sizes || []).length > 0 && (
+        <p className="card-sizes">{(product.sizes || []).slice(0, 5).join(' · ')}</p>
+      )}
     </>
   )
 

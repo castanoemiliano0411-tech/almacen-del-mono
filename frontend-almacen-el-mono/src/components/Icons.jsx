@@ -36,6 +36,14 @@ export function IconEye() {
   )
 }
 
+export function IconHeart({ filled = false }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.7">
+      <path d="M12 20s-7-4.4-9.5-8.2C.8 8.6 2.2 5 6 5c2 0 3.2 1.1 4 2.2C10.8 6.1 12 5 14 5c3.8 0 5.2 3.6 3.5 6.8C19 15.6 12 20 12 20Z" />
+    </svg>
+  )
+}
+
 export function IconMenu({ open }) {
   return open ? (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">

@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
+import { FavoritesProvider } from './context/FavoritesContext'
 import { AuthProvider } from './context/AuthContext'
 import { CatalogProvider } from './context/CatalogContext'
 import Layout from './components/Layout'
@@ -10,6 +11,7 @@ import Home from './pages/Home'
 import Shop from './pages/Shop'
 import Product from './pages/Product'
 import Cart from './pages/Cart'
+import Favorites from './pages/Favorites'
 import Checkout from './pages/Checkout'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -31,6 +33,7 @@ export default function App() {
   return (
     <AuthProvider>
       <CatalogProvider>
+      <FavoritesProvider>
       <CartProvider>
         <BrowserRouter>
           <SecretAccess />
@@ -121,6 +124,7 @@ export default function App() {
               <Route path="/tienda" element={<Shop />} />
               <Route path="/producto/:id" element={<Product />} />
               <Route path="/carrito" element={<Cart />} />
+              <Route path="/favoritos" element={<Favorites />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/nosotros" element={<About />} />
               <Route path="/contacto" element={<Contact />} />
@@ -139,6 +143,7 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </CartProvider>
+      </FavoritesProvider>
       </CatalogProvider>
     </AuthProvider>
   )
