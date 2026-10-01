@@ -72,9 +72,9 @@ function idleMs() {
 }
 
 function cookie(name, value, maxAge) {
-  const sameSite = process.env.COOKIE_SAMESITE || 'Lax'
+  const sameSite = process.env.COOKIE_SAMESITE || (process.env.NODE_ENV === 'production' ? 'None' : 'Lax')
   const secure =
-    process.env.NODE_ENV === 'production' || sameSite.toLowerCase() === 'none' ? '; Secure' : ''
+    process.env.NODE_ENV === 'production' || String(sameSite).toLowerCase() === 'none' ? '; Secure' : ''
   return `${name}=${value}; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=${maxAge}${secure}`
 }
 

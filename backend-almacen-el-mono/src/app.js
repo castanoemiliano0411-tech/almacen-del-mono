@@ -22,14 +22,24 @@ const corsOrigins = String(process.env.CORS_ORIGIN || 'http://localhost:5173')
   .map((item) => item.trim())
   .filter(Boolean)
 
+function originAllowed(origin) {
+  if (!origin) return true
+  if (corsOrigins.includes(origin)) return true
+  try {
+    const { hostname, protocol } = new URL(origin)
+    if (protocol !== 'http:' && protocol !== 'https:') return false
+    if (hostname === 'localhost' || hostname === '127.0.0.1') return true
+    if (hostname.includes('almacen-del-mono') && hostname.endsWith('.vercel.app')) return true
+  } catch {
+    return false
+  }
+  return false
+}
+
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || corsOrigins.includes(origin)) {
-        callback(null, true)
-        return
-      }
-      callback(null, false)
+      callback(null, originAllowed(origin))
     },
     credentials: true,
   }),
@@ -70,7 +80,17 @@ app.use((req, res) => {
 
 app.use((err, _req, res, _next) => {
   console.error(err)
-  res.status(500).json({ error: 'Error interno del servidor' })
+  const dbDown =
+    err.code === 'ECONNRESET' ||
+    err.code === 'ETIMEDOUT' ||
+    err.code === 'ENOTFOUND' ||
+    err.code === 'ECONNREFUSED' ||
+    err.fatal === true
+  res.status(dbDown ? 503 : 500).json({
+    error: dbDown
+      ? 'No hay conexión con la base de datos. Revisá internet y que MySQL de Clever Cloud esté activo.'
+      : 'Error interno del servidor',
+  })
 })
 
 export default app
