@@ -8,8 +8,12 @@ import { logAction } from '../audit.js'
 import { deleteMedia, findMediaById, insertMedia, listMedia } from '../db/queries.js'
 
 const router = Router()
-const uploadDir = path.join(process.cwd(), 'uploads')
-if (!existsSync(uploadDir)) mkdirSync(uploadDir, { recursive: true })
+const uploadDir = process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(process.cwd(), 'uploads')
+try {
+  if (!existsSync(uploadDir)) mkdirSync(uploadDir, { recursive: true })
+} catch {
+  // En Vercel el disco de la app es de solo lectura; /tmp sí permite subir.
+}
 
 const ALLOWED = new Set([
   'image/jpeg',

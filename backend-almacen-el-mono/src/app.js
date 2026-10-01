@@ -45,7 +45,10 @@ app.use(
   }),
 )
 app.use(express.json())
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')))
+app.use(
+  '/uploads',
+  express.static(process.env.VERCEL ? path.join('/tmp', 'uploads') : path.join(process.cwd(), 'uploads')),
+)
 app.use(optionalAuth)
 app.use(touchSession)
 app.use(sessionLimit)
