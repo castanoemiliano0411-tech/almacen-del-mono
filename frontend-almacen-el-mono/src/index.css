@@ -2052,15 +2052,35 @@ button {
   transform: scale(0.94);
 }
 
+.wa-badge .ig-badge-mark {
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 28%, #9ff5b8, transparent 42%),
+    linear-gradient(145deg, #5bf081, #25d366 48%, #128c7e);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.38);
+}
+
+.wa-badge:hover .ig-badge-mark,
+.wa-badge:focus-visible .ig-badge-mark {
+  box-shadow: 0 12px 28px rgba(37, 211, 102, 0.5);
+}
+
 .ig-in-header {
   margin-right: 2px;
 }
 
-.footer .ig-badge {
+.footer .ig-badge,
+.contact-socials .ig-badge {
   margin-top: 8px;
 }
 
-.store-card-ig .ig-badge {
+.contact-socials {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.store-card-ig .ig-badge,
+.store-card-wa .ig-badge {
   margin: 6px 0 10px;
 }
 

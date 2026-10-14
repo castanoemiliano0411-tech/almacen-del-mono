@@ -7,6 +7,7 @@ import { useFavorites } from '../context/FavoritesContext'
 import { CLIENT_MENU } from '../data/shopNav'
 import { IconBag, IconHeart, IconMenu, IconSearch } from './Icons'
 import InstagramBadge from './InstagramBadge'
+import WhatsAppBadge from './WhatsAppBadge'
 
 const CATEGORY_QUERY = {
   mujer: 'mujer',
@@ -135,6 +136,7 @@ export default function Header() {
               Entrar
             </NavLink>
           )}
+          <WhatsAppBadge size="sm" showLabel={false} className="ig-in-header" />
           <InstagramBadge size="sm" showLabel={false} className="ig-in-header" />
           <button className="icon-btn" type="button" aria-label="Buscar" onClick={() => setSearchOpen((v) => !v)}>
             <IconSearch />

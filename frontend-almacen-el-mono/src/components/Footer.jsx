@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { stores, WHATSAPP, whatsappLink } from '../data/stores'
+import { stores } from '../data/stores'
 import { useCatalog } from '../context/CatalogContext'
 import InstagramBadge from './InstagramBadge'
+import WhatsAppBadge from './WhatsAppBadge'
 
 export default function Footer() {
   const { getBrands } = useCatalog()
@@ -42,7 +43,7 @@ export default function Footer() {
               </a>
             </p>
           ))}
-          <a href={whatsappLink('Hola, El Almacén del Mono')}>WhatsApp {WHATSAPP.display}</a>
+          <WhatsAppBadge size="md" />
           <InstagramBadge size="md" />
         </div>
       </div>

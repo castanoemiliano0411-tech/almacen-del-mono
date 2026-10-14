@@ -1,5 +1,6 @@
-import { INSTAGRAM, stores, WHATSAPP, whatsappLink } from '../data/stores'
+import { INSTAGRAM, stores, whatsappLink } from '../data/stores'
 import InstagramBadge from './InstagramBadge'
+import WhatsAppBadge from './WhatsAppBadge'
 
 function StoreMap({ store }) {
   if (!store.photo || !store.map) return null
@@ -35,9 +36,7 @@ export default function StoresStrip() {
           </h2>
         </div>
         <div className="stores-links">
-          <a className="stores-wa" href={whatsappLink('Hola, El Almacén del Mono')}>
-            WhatsApp {WHATSAPP.display}
-          </a>
+          <WhatsAppBadge size="md" />
           <InstagramBadge size="md" className="ig-in-stores" />
         </div>
       </div>
@@ -58,12 +57,7 @@ export default function StoresStrip() {
                   Cómo llegar
                 </a>
               )}
-              <a
-                className="btn btn-ghost"
-                href={whatsappLink(`Hola, busco el local de ${store.city}`)}
-              >
-                WhatsApp
-              </a>
+              <WhatsAppBadge size="sm" message={`Hola, busco el local de ${store.city}`} />
             </div>
           </article>
         ))}
@@ -71,10 +65,8 @@ export default function StoresStrip() {
         <article className="store-card store-card-wa">
           <p className="store-city">WhatsApp</p>
           <h3>Escribinos</h3>
-          <p className="store-address">{WHATSAPP.display}</p>
-          <p className="store-hint">
-            Tocá el botón y se abre el chat con 313 753 8577. Pedí talla, stock o cómo llegar.
-          </p>
+          <WhatsAppBadge size="lg" />
+          <p className="store-hint">Tocá el logo verde y se abre el chat. Pedí talla, stock o cómo llegar.</p>
           <p className="store-meta">La Ceja y Rionegro · horarios de cada local</p>
           <div className="store-actions">
             <a className="btn btn-lime" href={whatsappLink('Hola, El Almacén del Mono')}>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { stores, WHATSAPP, whatsappLink } from '../data/stores'
+import { stores } from '../data/stores'
 import InstagramBadge from '../components/InstagramBadge'
+import WhatsAppBadge from '../components/WhatsAppBadge'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
@@ -64,10 +65,8 @@ export default function Contact() {
             </div>
           ))}
           <p>hola@almacendelmono.com</p>
-          <a className="btn btn-lime" href={whatsappLink('Hola, El Almacén del Mono')} style={{ marginTop: 16 }}>
-            WhatsApp {WHATSAPP.display}
-          </a>
-          <div style={{ marginTop: 14 }}>
+          <div className="contact-socials">
+            <WhatsAppBadge size="md" />
             <InstagramBadge size="md" />
           </div>
         </aside>
