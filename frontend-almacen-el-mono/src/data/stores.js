@@ -3,6 +3,11 @@ export const WHATSAPP = {
   display: '313 753 8577',
 }
 
+export const INSTAGRAM = {
+  handle: '@almacendelmono',
+  url: 'https://www.instagram.com/almacendelmono/',
+}
+
 export function whatsappLink(message) {
   const text = message ? `?text=${encodeURIComponent(message)}` : ''
   return `https://wa.me/${WHATSAPP.e164}${text}`

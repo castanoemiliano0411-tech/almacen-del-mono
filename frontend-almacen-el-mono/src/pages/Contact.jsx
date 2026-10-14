@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { stores, WHATSAPP, whatsappLink } from '../data/stores'
+import { INSTAGRAM, stores, WHATSAPP, whatsappLink } from '../data/stores'
 
 export default function Contact() {
   const [sent, setSent] = useState(false)
@@ -65,6 +65,9 @@ export default function Contact() {
           <p>hola@almacendelmono.com</p>
           <a className="btn btn-lime" href={whatsappLink('Hola, El Almacén del Mono')} style={{ marginTop: 16 }}>
             WhatsApp {WHATSAPP.display}
+          </a>
+          <a className="btn btn-ghost" href={INSTAGRAM.url} target="_blank" rel="noreferrer" style={{ marginTop: 10 }}>
+            Instagram {INSTAGRAM.handle}
           </a>
         </aside>
       </div>

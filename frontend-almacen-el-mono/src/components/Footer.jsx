@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { stores, WHATSAPP, whatsappLink } from '../data/stores'
+import { INSTAGRAM, stores, WHATSAPP, whatsappLink } from '../data/stores'
 import { useCatalog } from '../context/CatalogContext'
 
 export default function Footer() {
@@ -42,6 +42,9 @@ export default function Footer() {
             </p>
           ))}
           <a href={whatsappLink('Hola, El Almacén del Mono')}>WhatsApp {WHATSAPP.display}</a>
+          <a href={INSTAGRAM.url} target="_blank" rel="noreferrer">
+            Instagram {INSTAGRAM.handle}
+          </a>
         </div>
       </div>
       <div className="footer-bottom">© {new Date().getFullYear()} El Almacén del Mono · Drop 007</div>

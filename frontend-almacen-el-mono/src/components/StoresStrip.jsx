@@ -1,4 +1,4 @@
-import { stores, WHATSAPP, whatsappLink } from '../data/stores'
+import { INSTAGRAM, stores, WHATSAPP, whatsappLink } from '../data/stores'
 
 function StoreMap({ store }) {
   if (!store.photo || !store.map) return null
@@ -33,9 +33,14 @@ export default function StoresStrip() {
             <em> La Ceja y Rionegro.</em>
           </h2>
         </div>
-        <a className="stores-wa" href={whatsappLink('Hola, El Almacén del Mono')}>
-          WhatsApp {WHATSAPP.display}
-        </a>
+        <div className="stores-links">
+          <a className="stores-wa" href={whatsappLink('Hola, El Almacén del Mono')}>
+            WhatsApp {WHATSAPP.display}
+          </a>
+          <a className="stores-wa" href={INSTAGRAM.url} target="_blank" rel="noreferrer">
+            Instagram {INSTAGRAM.handle}
+          </a>
+        </div>
       </div>
 
       <div className="stores-grid">
@@ -75,6 +80,19 @@ export default function StoresStrip() {
           <div className="store-actions">
             <a className="btn btn-lime" href={whatsappLink('Hola, El Almacén del Mono')}>
               Abrir WhatsApp
+            </a>
+          </div>
+        </article>
+
+        <article className="store-card store-card-ig">
+          <p className="store-city">Instagram</p>
+          <h3>Mirá el local</h3>
+          <p className="store-address">{INSTAGRAM.handle}</p>
+          <p className="store-hint">Fotos, drops y el día a día de El Almacén del Mono. Entrá al perfil y seguilos.</p>
+          <p className="store-meta">La Ceja y Rionegro · misma info que acá</p>
+          <div className="store-actions">
+            <a className="btn btn-lime" href={INSTAGRAM.url} target="_blank" rel="noreferrer">
+              Abrir Instagram
             </a>
           </div>
         </article>
