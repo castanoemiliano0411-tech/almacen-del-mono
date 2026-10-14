@@ -173,23 +173,37 @@ export default function Header() {
 
       {open && <button type="button" className="nav-backdrop" aria-label="Cerrar menú" onClick={close} />}
       <nav className={`mobile-drawer ${open ? 'open' : ''}`} aria-label="Menú">
-        <p className="mobile-drawer-title">Almacén El Mono</p>
-        {CLIENT_MENU.map(menuItem)}
-        {user?.role === 'client' ? (
-          <NavLink to="/cuenta" className="mobile-drawer-link" onClick={close}>
-            Mi cuenta
-          </NavLink>
-        ) : (
-          <>
-            <NavLink to="/entrar" className="mobile-drawer-link" onClick={close}>
-              Iniciar sesión
-            </NavLink>
-            <NavLink to="/registro" className="mobile-drawer-link" onClick={close}>
-              Crear cuenta
-            </NavLink>
-          </>
-        )}
+        <div className="mobile-drawer-head">
+          <p className="mobile-drawer-title">El Almacén del Mono</p>
+          <button type="button" className="icon-btn mobile-drawer-close" onClick={close} aria-label="Cerrar menú">
+            <IconMenu open />
+          </button>
+        </div>
+
+        {CLIENT_MENU.map((group) => (
+          <div key={group.title} className="mobile-drawer-section">
+            <p className="mobile-drawer-label">{group.title}</p>
+            {group.items.map(menuItem)}
+            {group.title === 'Tu cuenta' &&
+              (user?.role === 'client' ? (
+                <NavLink to="/cuenta" className="mobile-drawer-link" onClick={close}>
+                  Mi cuenta
+                </NavLink>
+              ) : (
+                <>
+                  <NavLink to="/entrar" className="mobile-drawer-link" onClick={close}>
+                    Iniciar sesión
+                  </NavLink>
+                  <NavLink to="/registro" className="mobile-drawer-link" onClick={close}>
+                    Crear cuenta
+                  </NavLink>
+                </>
+              ))}
+          </div>
+        ))}
+
         <div className="mobile-drawer-socials">
+          <p className="mobile-drawer-label">Contacto</p>
           <WhatsAppBadge size="md" />
           <InstagramBadge size="md" />
         </div>

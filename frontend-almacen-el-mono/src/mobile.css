@@ -433,15 +433,15 @@ body.nav-lock {
   .mobile-drawer {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 0;
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
-    width: min(320px, 88vw);
+    width: min(340px, 90vw);
     z-index: 45;
     background: #0a0a0a;
-    padding: 20px 18px 32px;
+    padding: 12px 18px 28px;
     overflow: auto;
     transform: translateX(110%);
     transition: transform 0.25s ease;
@@ -451,11 +451,45 @@ body.nav-lock {
     transform: none;
   }
 
+  .mobile-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0 14px;
+    border-bottom: 1px solid #222;
+    position: sticky;
+    top: 0;
+    background: #0a0a0a;
+    z-index: 1;
+  }
+
   .mobile-drawer-title {
     font-family: Oswald, sans-serif;
     text-transform: uppercase;
-    font-size: 1.2rem;
-    margin-bottom: 12px;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+    margin: 0;
+    color: #fff;
+  }
+
+  .mobile-drawer-close {
+    width: 40px;
+    height: 40px;
+    color: #fff;
+  }
+
+  .mobile-drawer-section {
+    padding: 14px 0 4px;
+  }
+
+  .mobile-drawer-label {
+    margin: 0 0 6px;
+    color: var(--lime);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   .mobile-drawer-link {
@@ -465,7 +499,7 @@ body.nav-lock {
     background: transparent;
     border: 0;
     color: #eee;
-    padding: 12px 0;
+    padding: 11px 0;
     font-size: 0.95rem;
     min-height: 44px;
     border-bottom: 1px solid #1a1a1a;
@@ -473,10 +507,10 @@ body.nav-lock {
 
   .mobile-drawer-socials {
     display: grid;
-    gap: 14px;
-    margin-top: 22px;
+    gap: 12px;
+    margin-top: 10px;
     padding-top: 16px;
-    border-top: 1px solid #1a1a1a;
+    border-top: 1px solid #222;
   }
 }
 
