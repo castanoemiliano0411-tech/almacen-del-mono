@@ -420,6 +420,16 @@ body.nav-lock {
     display: flex;
   }
 
+  .stores-links {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .stores-links .ig-badge {
+    max-width: 100%;
+  }
+
   .mobile-drawer {
     display: flex;
     flex-direction: column;
