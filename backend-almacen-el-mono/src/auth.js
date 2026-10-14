@@ -180,15 +180,21 @@ export async function hashPassword(password) {
 }
 
 export async function checkPassword(password, hash) {
-  return bcrypt.compare(password, hash)
+  if (!hash) return false
+  try {
+    return await bcrypt.compare(password, hash)
+  } catch {
+    return false
+  }
 }
 
 export async function checkPasswordVariants(password, hash) {
+  if (!hash) return false
   const source = String(password || '')
-  const folded = source.normalize('NFD').replace(/\p{M}/gu, '')
+  const folded = source.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   const withAccent = source.replace(/Almacen/gi, 'Almacén')
   for (const candidate of new Set([source, folded, withAccent])) {
-    if (candidate && (await bcrypt.compare(candidate, hash))) return true
+    if (candidate && (await checkPassword(candidate, hash))) return true
   }
   return false
 }

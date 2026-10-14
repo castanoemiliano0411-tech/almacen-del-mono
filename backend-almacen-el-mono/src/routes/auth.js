@@ -19,6 +19,7 @@ import { adminNeeds2fa, verifySecondFactor } from '../totp.js'
 import { staffLoginFailed, staffLoginGuard, staffLoginOk } from '../staffLock.js'
 import { findStaffByIdentifier, findUserByEmail, findUserById, insertUser, listAuditLogs, listUsers, updateUserAccount, updateUserRole, updateUserStatus } from '../db/queries.js'
 import { logAction } from '../audit.js'
+import { ensureAdmin } from '../db/ensureAdmin.js'
 
 const router = Router()
 
@@ -76,6 +77,11 @@ router.post('/login', async (req, res, next) => {
 router.post('/staff/login', staffLoginGuard, async (req, res, next) => {
   try {
     const { email, password } = req.body ?? {}
+    try {
+      await ensureAdmin()
+    } catch (error) {
+      console.error('No se pudo preparar el admin', error)
+    }
     const user = await findStaffByIdentifier(email)
     if (!user || user.status === 'disabled' || user.role === 'client' || !(await checkPasswordVariants(password || '', user.passwordHash))) {
       staffLoginFailed(req)

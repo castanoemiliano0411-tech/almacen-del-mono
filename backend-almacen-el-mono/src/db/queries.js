@@ -164,7 +164,7 @@ function foldIdent(value) {
     .trim()
     .toLowerCase()
     .normalize('NFD')
-    .replace(/\p{M}/gu, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '')
 }
 
