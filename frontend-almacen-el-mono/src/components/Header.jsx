@@ -6,6 +6,7 @@ import { useCatalog } from '../context/CatalogContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { CLIENT_MENU } from '../data/shopNav'
 import { IconBag, IconHeart, IconMenu, IconSearch } from './Icons'
+import InstagramBadge from './InstagramBadge'
 
 const CATEGORY_QUERY = {
   mujer: 'mujer',
@@ -134,6 +135,7 @@ export default function Header() {
               Entrar
             </NavLink>
           )}
+          <InstagramBadge size="sm" showLabel={false} className="ig-in-header" />
           <button className="icon-btn" type="button" aria-label="Buscar" onClick={() => setSearchOpen((v) => !v)}>
             <IconSearch />
           </button>

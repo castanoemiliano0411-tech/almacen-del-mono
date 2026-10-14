@@ -1,4 +1,5 @@
 import { INSTAGRAM, stores, WHATSAPP, whatsappLink } from '../data/stores'
+import InstagramBadge from './InstagramBadge'
 
 function StoreMap({ store }) {
   if (!store.photo || !store.map) return null
@@ -37,9 +38,7 @@ export default function StoresStrip() {
           <a className="stores-wa" href={whatsappLink('Hola, El Almacén del Mono')}>
             WhatsApp {WHATSAPP.display}
           </a>
-          <a className="stores-wa" href={INSTAGRAM.url} target="_blank" rel="noreferrer">
-            Instagram {INSTAGRAM.handle}
-          </a>
+          <InstagramBadge size="md" className="ig-in-stores" />
         </div>
       </div>
 
@@ -87,8 +86,8 @@ export default function StoresStrip() {
         <article className="store-card store-card-ig">
           <p className="store-city">Instagram</p>
           <h3>Mirá el local</h3>
-          <p className="store-address">{INSTAGRAM.handle}</p>
-          <p className="store-hint">Fotos, drops y el día a día de El Almacén del Mono. Entrá al perfil y seguilos.</p>
+          <InstagramBadge size="lg" />
+          <p className="store-hint">Fotos, drops y el día a día. Tocá el logo y se abre el perfil.</p>
           <p className="store-meta">La Ceja y Rionegro · misma info que acá</p>
           <div className="store-actions">
             <a className="btn btn-lime" href={INSTAGRAM.url} target="_blank" rel="noreferrer">

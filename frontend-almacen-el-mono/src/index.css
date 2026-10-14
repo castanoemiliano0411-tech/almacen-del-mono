@@ -1974,6 +1974,116 @@ button {
     #0a0a0a;
 }
 
+.ig-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #fff;
+  width: fit-content;
+}
+
+.ig-badge-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: radial-gradient(circle at 30% 30%, #fdf497, transparent 42%),
+    linear-gradient(45deg, #f9ce34, #ee2a7b 46%, #6228d7);
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(238, 42, 123, 0.35);
+  animation: igPulse 2.4s ease-in-out infinite;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.ig-badge-mark::after {
+  content: '';
+  position: absolute;
+  inset: -40% 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-120%) rotate(18deg);
+  animation: igShine 2.8s ease-in-out infinite;
+}
+
+.ig-sm .ig-badge-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+}
+
+.ig-md .ig-badge-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+
+.ig-lg .ig-badge-mark {
+  width: 84px;
+  height: 84px;
+  border-radius: 24px;
+  margin: 8px 0 4px;
+}
+
+.ig-badge-copy {
+  display: grid;
+  gap: 2px;
+  line-height: 1.1;
+}
+
+.ig-badge-copy b {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ig-badge-copy small {
+  color: #cfcfcf;
+  font-size: 0.85rem;
+}
+
+.ig-badge:hover .ig-badge-mark,
+.ig-badge:focus-visible .ig-badge-mark {
+  transform: rotate(-8deg) scale(1.08);
+  box-shadow: 0 12px 28px rgba(249, 206, 52, 0.4);
+  animation-play-state: paused;
+}
+
+.ig-badge:active .ig-badge-mark {
+  transform: scale(0.94);
+}
+
+.ig-in-header {
+  margin-right: 2px;
+}
+
+.footer .ig-badge {
+  margin-top: 8px;
+}
+
+.store-card-ig .ig-badge {
+  margin: 6px 0 10px;
+}
+
+@keyframes igPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes igShine {
+  0%,
+  55% {
+    transform: translateX(-140%) rotate(18deg);
+  }
+  100% {
+    transform: translateX(220%) rotate(18deg);
+  }
+}
+
 .brand-strip {
   width: min(1440px, calc(100% - 48px));
   margin: 0 auto;
@@ -2713,6 +2823,11 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ig-badge-mark,
+  .ig-badge-mark::after {
+    animation: none;
+  }
+
   .hero-drop-img,
   .product-thumb,
   .product-thumb img,

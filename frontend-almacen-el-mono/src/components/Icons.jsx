@@ -50,6 +50,16 @@ export function IconHeart({ filled = false }) {
   )
 }
 
+export function IconInstagram({ size = 28 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5.2" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="12" cy="12" r="4.15" stroke="currentColor" strokeWidth="1.85" />
+      <circle cx="17.15" cy="6.85" r="1.15" fill="currentColor" />
+    </svg>
+  )
+}
+
 export function IconMenu({ open }) {
   return open ? (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
