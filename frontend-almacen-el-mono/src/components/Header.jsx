@@ -136,8 +136,6 @@ export default function Header() {
               Entrar
             </NavLink>
           )}
-          <WhatsAppBadge size="sm" showLabel={false} className="ig-in-header" />
-          <InstagramBadge size="sm" showLabel={false} className="ig-in-header" />
           <button className="icon-btn" type="button" aria-label="Buscar" onClick={() => setSearchOpen((v) => !v)}>
             <IconSearch />
           </button>
@@ -191,6 +189,10 @@ export default function Header() {
             </NavLink>
           </>
         )}
+        <div className="mobile-drawer-socials">
+          <WhatsAppBadge size="md" />
+          <InstagramBadge size="md" />
+        </div>
       </nav>
     </header>
   )

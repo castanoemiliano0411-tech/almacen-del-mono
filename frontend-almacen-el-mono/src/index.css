@@ -2671,14 +2671,11 @@ button {
   }
 
   .header-inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+    grid-template-columns: minmax(0, 1fr) auto;
     height: auto;
     min-height: 56px;
-    padding: 8px 4px 10px;
-    width: calc(100% - 12px);
+    padding: 8px 0;
+    width: calc(100% - 16px);
     gap: 8px;
   }
 
@@ -2686,7 +2683,7 @@ button {
     justify-self: start;
     transform: none;
     font-size: 0.8rem;
-    max-width: 58%;
+    max-width: 100%;
   }
 
   .brand-lockup {
@@ -2698,29 +2695,13 @@ button {
   }
 
   .header-actions {
-    flex: 1 1 100%;
-    justify-content: space-between;
-    justify-self: stretch;
-    width: 100%;
+    flex-shrink: 0;
     gap: 0;
-    padding: 2px 0 0;
   }
 
   .header-actions .icon-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .ig-in-header {
-    margin: 0;
-    flex-shrink: 0;
-  }
-
-  .ig-in-header .ig-badge-mark {
-    width: 32px;
-    height: 32px;
-    animation: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    width: 40px;
+    height: 40px;
   }
 
   .hero-hotel {
@@ -2862,18 +2843,13 @@ button {
   }
 
   .header-actions .icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
   }
 
   .icon-btn {
     width: 44px;
     height: 44px;
-  }
-
-  .ig-in-header .ig-badge-mark {
-    width: 30px;
-    height: 30px;
   }
 
   .fav-header .icon-heart {

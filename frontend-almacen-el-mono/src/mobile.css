@@ -470,6 +470,14 @@ body.nav-lock {
     min-height: 44px;
     border-bottom: 1px solid #1a1a1a;
   }
+
+  .mobile-drawer-socials {
+    display: grid;
+    gap: 14px;
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid #1a1a1a;
+  }
 }
 
 @media (min-width: 981px) {
