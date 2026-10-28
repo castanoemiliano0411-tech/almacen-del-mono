@@ -43,8 +43,10 @@ export default function Footer() {
               </a>
             </p>
           ))}
-          <WhatsAppBadge size="md" />
-          <InstagramBadge size="md" />
+          <div className="footer-socials">
+            <WhatsAppBadge size="md" />
+            <InstagramBadge size="md" />
+          </div>
         </div>
       </div>
       <div className="footer-bottom">© {new Date().getFullYear()} El Almacén del Mono · Drop 007</div>

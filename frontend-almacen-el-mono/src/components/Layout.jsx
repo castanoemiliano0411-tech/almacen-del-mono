@@ -4,6 +4,7 @@ import Header from './Header'
 import Footer from './Footer'
 import CartDrawer from './CartDrawer'
 import StaffStoreBar from './StaffStoreBar'
+import SocialFloat from './SocialFloat'
 
 export default function Layout() {
   const { pathname, hash } = useLocation()
@@ -27,6 +28,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <SocialFloat />
       <CartDrawer />
     </div>
   )

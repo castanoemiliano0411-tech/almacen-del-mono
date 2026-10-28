@@ -2073,10 +2073,15 @@ button {
   margin-top: 8px;
 }
 
+.footer-socials,
 .contact-socials {
   display: grid;
   gap: 12px;
   margin-top: 16px;
+}
+
+.social-float {
+  display: none;
 }
 
 .store-card-ig .ig-badge,
